@@ -1,7 +1,8 @@
+import api from '@/lib/api'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
 
 
 function RegisterScreen() {
@@ -9,6 +10,22 @@ function RegisterScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm_password, setConfirm_password] = useState('')
+
+  const handleRegister = async () => {
+    try {
+      const res = await api.post('/register', {
+        name,
+        email,
+        password,
+        password_confirmation : confirm_password
+      });
+      router.replace('/Auth/Reset/OtpReset')
+
+    } catch (err: any) {
+      console.log(err.response?.data)
+      Alert.alert("Error", "Gagal register, cek inputanmu")
+    }
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -49,6 +66,7 @@ function RegisterScreen() {
             value={password}
             onChangeText={setPassword}
             placeholder='Masukkan password anda'
+            secureTextEntry
             autoCapitalize='none'
             className='flex-1 ml-2 text-base text-gray-800'
           />
@@ -58,6 +76,7 @@ function RegisterScreen() {
           <TextInput
             value={confirm_password}
             onChangeText={setConfirm_password}
+            secureTextEntry
             placeholder='Masukkan confirmasi password anda'
             autoCapitalize='none'
             className='flex-1 ml-2 text-base text-gray-950'
@@ -66,7 +85,7 @@ function RegisterScreen() {
 
         <TouchableOpacity
           className='flex-row justify-center border border-gray-950 bg-blue-800 mt-14 rounded-lg py-4 w-3/4'
-          onPress={() => router.replace('/Auth/LoginScreen')}>
+          onPress={handleRegister}>
           <Text className='text-sm font-semibold text-white text-center'>Daftar</Text>
         </TouchableOpacity>
 

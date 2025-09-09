@@ -5,21 +5,19 @@ import { router } from "expo-router";
 export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/Auth/Reset/InputEmail");
+      router.replace("/Auth/RegisterScreen"); // langsung masuk ke tab utama
     }, 2000);
 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <View className="flex-1 bg-white">
-      <View className="flex-1 items-center justify-center bg-white">
-        <Image
-          source={require('../../assets/images/splash-icon.png')}
-          className="w-80 h-80"
-          resizeMode="contain"
-        />
-      </View>
+    <View className="flex-1 bg-white items-center justify-center">
+      <Image
+        source={require("../../assets/images/splash-icon.png")}
+        className="w-80 h-80"
+        resizeMode="contain"
+      />
     </View>
   );
 }

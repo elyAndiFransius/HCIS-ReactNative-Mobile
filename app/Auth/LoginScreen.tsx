@@ -1,11 +1,25 @@
+import api from '@/lib/api'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  const handleLogin = async () => {
+    try {
+      const res = await api.post('/login', {
+        email,
+        password
+      });
+      router.replace('/(tabs)/Beranda')
+    } catch (err: any) {
+      console.log(err.response?.data)
+      Alert.alert("Error", "Gagal Login, check Email dan Password")
+    }
+  }
 
   return (
     <View className="flex-1 bg-white">
@@ -50,7 +64,7 @@ function LoginScreen() {
 
         <TouchableOpacity
           className="flex-row justify-center border border-gray-950 bg-blue-800 rounded-lg px-4 py-4 mt-8 mb-4 w-3/4"
-          onPress={() => router.replace('/(tabs)/Beranda')}>
+         onPress={handleLogin} >
           <Text className="text-lg font-semibold text-white text-center">
             Masuk
           </Text>
@@ -58,7 +72,7 @@ function LoginScreen() {
 
         <Text className="text-center mt-5 w-3/4">
           Belum punya akun?
-          <Text onPress={() => router.replace('/Auth/RegisterScreen')} className='text-blue-700 font-semibold'> Daftar sekarang! </Text>
+          <Text onPress={() => router.push('/Auth/RegisterScreen')} className='text-blue-700 font-semibold'> Daftar sekarang! </Text>
           {"\n"}atau masuk dengan
         </Text>
 

@@ -3,8 +3,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image, View } from 'react-native';
 import "../../styles/global.css";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StackActions } from '@react-navigation/native';
 
-export default function RootLayout() {
+export default function TabsLayout() {
     const insets = useSafeAreaInsets();
 
     return (

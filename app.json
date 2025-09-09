@@ -1,19 +1,18 @@
 {
   "expo": {
-    "name": "IHC",
-    "slug": "IHC",
+    "name": "",
+    "slug": "",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "ihc",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
@@ -21,13 +20,17 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/icon.png"
     },
     "plugins": [
       "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "splash": {
+      "backgroundColor": "#ffffff",
+      "resizeMode": "contain"
     }
   }
 }

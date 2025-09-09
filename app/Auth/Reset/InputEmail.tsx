@@ -1,7 +1,9 @@
+import Button from '@/src/components/Button'
+import InputField from '@/src/components/InputField'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity, Text, Image, TextInput } from 'react-native'
 
 function InputEmail() {
   const [email, setEmail] = useState('')
@@ -28,26 +30,23 @@ function InputEmail() {
         </Text>
       </View>
 
-      <View className="flex-1 items-center mt-5 bg-white">
-        <View className='flex-row items-center border border-gray-700 bg-slate-200 rounded-lg px-5 mt-3 py-2 w-4/5'>
-          <Ionicons name='mail-outline' size={24} color='gray' />
-          <TextInput
-            value={email}
-            onChangeText={setEmail}
-            placeholder='Masukkan email kamu'
-            keyboardType='email-address'
-            autoCapitalize='none'
-          />
-        </View>
-        <TouchableOpacity
-          className='flex-row justify-center border bg-blue-800 rounded-lg py-2 mt-5 w-4/5'
-          onPress={() => router.push('/Auth/Reset/OtpReset')}>
-          <Text className='text-lg text-white font-semibold py-2'>Kirim Kode</Text>
-        </TouchableOpacity>
+      <View className="flex-1 items-center mt-5 m-8  bg-white ">
+        <InputField
+          icon="mail-outline"
+          placeholder="Masukkan email kamu"
+          value={email}
+          onChangeText={setEmail}
+        />
+
+        <Button
+          label='Kirim kode'
+          onPress={() => router.push('/Auth/Reset/OtpReset')}
+        />
+
 
 
       </View>
-    </View>
+    </View >
 
   )
 }

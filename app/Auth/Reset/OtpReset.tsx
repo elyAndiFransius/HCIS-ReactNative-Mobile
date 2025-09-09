@@ -1,10 +1,25 @@
 import React, { useRef, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import Button from '@/src/components/Button'
+import api from "@/lib/api";
 
 function OtpReset() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
+
+  const handleOtp = async () => {
+    try {
+      const res = await api.post('auth/register/verify-otp', {
+        otp
+      })
+    } catch (err: any) {
+      console.log(err.response?.data)
+      Alert.alert("Error", "Gagal kode otp salah")
+
+    }
+  }
 
   // Simpan ref tiap input OTP
   const inputs = useRef<(TextInput | null)[]>([]);
@@ -59,7 +74,7 @@ function OtpReset() {
       <View className="mt-6 items-center px-4 mb-8">
 
         {/* Input OTP */}
-        <View className="flex-row justify-between w-full px-4 mb-10"> 
+        <View className="flex-row justify-between w-full px-4 mb-10">
           {otp.map((digit, index) => (
             <TextInput
               key={index}
@@ -76,18 +91,18 @@ function OtpReset() {
         </View>
 
         {/* Tombol Submit */}
-        <TouchableOpacity
-          className="flex-row justify-center bg-blue-800 rounded-lg py-4 w-full"
-          onPress={() => {
+        <Button
+          label='Verifikasi'
+          onPress={ () => {
             if (otpCode.length === 6) {
-              router.push("/(tabs)/Beranda");
+              handleOtp();
+              router.push("/Auth/LoginScreen");
             } else {
               alert("Kode OTP harus 6 digit");
             }
           }}
         >
-          <Text className="text-lg font-semibold text-white">Verifikasi</Text>
-        </TouchableOpacity>
+        </Button>
       </View>
     </View>
   );
