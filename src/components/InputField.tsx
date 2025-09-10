@@ -13,7 +13,7 @@ export function InputField({ icon, ...props }: InputFieldProps) {
       <Ionicons name={icon} size={22} color="#374151" />
       <TextInput
         {...props}
-        className='flex-1 ml-2 text-base  text-gray-800'
+        className='flex-1 ml-2 text-base  text-gray-600'
         placeholderTextColor={"#888"}
       />
     </View>

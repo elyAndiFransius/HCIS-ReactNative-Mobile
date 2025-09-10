@@ -1,65 +1,65 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import {
   View,
   Text,
   ScrollView,
   TextInput,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
+
+
 const Header = () => {
+
   return (
-    <View className="flex-row items-center justify-between shadow px-4 py-3 bg-white">
-      <Ionicons name="chevron-back" size={28} color="#1f2937" />
-      <View className="flex-1 items-center">
-        <Text className="text-lg font-bold text-gray-700">Chat Box</Text>
+    <SafeAreaView edges={["top", "left", "right"]}>
+      <View className='flex-row m-5 justify-between'>
+        <TouchableOpacity>
+          <Ionicons name="chevron-back" size={24} color="#374151" />
+        </TouchableOpacity>
+        <Text className='text-lg font-semibold text-gray-700'>Chatbot AI</Text>
+        <TouchableOpacity>
+          <AntDesign name='message1' size={20} color="#374151" />
+        </TouchableOpacity>
       </View>
-    </View>
-  );
-};
+    </SafeAreaView>
+  )
+}
 
 export default function ChatBox() {
   const [massege, setMassege] = useState('');
-  const insets = useSafeAreaInsets();
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right']}
-    className=' bg-slate-300'
-    >
+    <View className='flex-1'>
       <Header />
-
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'android' ? insets.bottom : 0}
-      >
-        <ScrollView
-          className="flex-1 bg-slate-300"
-          contentContainerStyle={{ paddingBottom: 10 }}
-        >
-          <View className="p-4">
-            <Text>Ini adalah isi chat Anda.</Text>
-          </View>
-        </ScrollView>
-
-        {/* Input chat */}
-        <View className="bg-sl mx-3 py-4 px-4 mb-20">
-          <View className="flex-row bg-slate-200 items-center justify-between rounded-full border border-slate-950 px-4">
-            <TextInput
-              value={massege}
-              onChangeText={setMassege}
-              placeholder="Ayo mulai percakapan"
-              className="flex-1 py-4"
-              style={{ color: '#000' }}
-              placeholderTextColor="#555"
-            />
-            <Ionicons name="paper-plane" size={20} color="#1f2937" />
-          </View>
+      <ScrollView
+        className="flex-1 m-5  px-10 py-20"
+        contentContainerStyle={{ paddingBottom: 80 }}>
+        <View className="p-4">
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </ScrollView>
+
+      <View className="flex-row m-5 bg justify-around mb-36">
+        <View className="flex-row bg-slate-200 items-center w-3/4 justify-between rounded-full border border-slate-950 px-4">
+          <TextInput
+            value={massege}
+            onChangeText={setMassege}
+            placeholder="Ayo mulai percakapan"
+            className="flex-1 py-4"
+            style={{ color: '#000' }}
+            placeholderTextColor="#555"
+          />
+          <Ionicons name="musical-notes" size={20} color="#1f2937" />
+        </View>
+        <View className='flex-row w-14 h-14 items-center justify-center bg-blue-600 rounded-full'>
+          <Ionicons name="paper-plane" size={20} color="#e2e8f0" />
+        </View>
+      </View>
+    </View>
   );
 }
