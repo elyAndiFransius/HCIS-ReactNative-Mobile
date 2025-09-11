@@ -47,6 +47,7 @@ export default function TabsLayout() {
                 name="ChatBox"
                 options={{
                     title: "Chat Box",
+                    tabBarStyle: {display : "none"},
                     tabBarIcon: () => (
                         <View
                             style={{

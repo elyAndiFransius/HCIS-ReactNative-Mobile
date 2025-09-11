@@ -15,7 +15,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TextDesc from '@/src/components/TextDesc';
 import Question from '@/src/components/question';
-import { router } from 'expo-router';
 
 const button = [
   { id: 1, label: "Dokter & Spesialis" },
@@ -28,7 +27,7 @@ const button = [
 const Header = () => {
   return (
     <View className='flex-row m-5 justify-between'>
-      <TouchableOpacity onPress={() => router.back()}>
+      <TouchableOpacity>
         <Ionicons name="chevron-back" size={24} color="#374151" />
       </TouchableOpacity>
       <Text className='text-lg font-semibold text-gray-700'>Chatbot AI</Text>
@@ -46,31 +45,32 @@ export default function ChatBox() {
     <SafeAreaView className='flex-1' edges={['top']}>
       <View className='flex-1'>
         <Header />
-
-        <KeyboardAvoidingView
+        
+        <KeyboardAvoidingView 
           style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
         >
+          {/* CHAT CONTENT */}
           <ScrollView
-            className="flex-1 px-5 ml-5 mr-5"
-            contentContainerStyle={{
+            className="flex-1 px-5"
+            contentContainerStyle={{ 
               paddingVertical: 20,
               paddingBottom: 20,
             }}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            <View className=" items-center mb-4 justify-center">
+            <View className="flex-row items-center mb-4 justify-center">
               <Image source={require('../../assets/icons/ai_icon.png')} />
               <TextDesc className='text-center justify-center'>
                 Halo saya asistent RS, pilih topik yang ingin Anda tanyakan disini, 👇
               </TextDesc>
             </View>
 
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false} 
               contentContainerStyle={{ paddingHorizontal: 10 }}
             >
               {button.map((item) => (
@@ -79,17 +79,18 @@ export default function ChatBox() {
             </ScrollView>
           </ScrollView>
 
+          {/* INPUT DI BAWAH */}
           <SafeAreaView edges={['bottom']}>
-            <View className=" px-4 py-3">
+            <View className="bg-white border-t border-gray-200 px-4 py-3">
               <View className="flex-row justify-between items-center">
                 <View className="flex-row bg-slate-200 items-center flex-1 mr-3 rounded-xl px-4">
                   <TextInput
                     value={massege}
                     onChangeText={setMassege}
                     placeholder="Tanyakan disini..."
-                    style={{
-                      flex: 1,
-                      paddingVertical: 12,
+                    style={{ 
+                      flex: 1, 
+                      paddingVertical: 12, 
                       color: '#000',
                       fontSize: 16
                     }}

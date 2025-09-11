@@ -1,5 +1,6 @@
 import CardEvent from '@/src/components/CardEvent'
 import { Ionicons } from '@expo/vector-icons'
+import { router } from 'expo-router'
 import React from 'react'
 import { SafeAreaView, View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 
@@ -24,7 +25,7 @@ const Header = () => (
     <View className='flex-row justify-between items-center px-5 py-3 mt-10 bg-gray-50 shadow'>
         <View className='flex-row items-center'>
             <Image
-                source={{ uri: "https://i.pravatar.cc/100" }}
+                source={require('../../assets/icons/akun.png')}
                 className='w-12 h-12 rounded-full mr-3'
             />
             <View>
@@ -71,7 +72,13 @@ export default function Beranda() {
                     columnWrapperStyle={{ justifyContent: "space-between", marginHorizontal: 20 }}
                     className='bg-white ml-5 mr-5 rounded-xl shadow'
                     renderItem={({ item }) => (
-                        <TouchableOpacity style={{ width: itemWidth, alignItems: "center", marginVertical: 10 }}>
+                        <TouchableOpacity
+                            style={{ width: itemWidth, alignItems: "center", marginVertical: 10 }}
+                            onPress={() => {
+                                if (item.title === "Pendaftaran") {
+                                    router.push('/menus/Pendaftaran/HomeScreen')
+                                }
+                            }}>
                             <View className='w-14 h-14 bg-slate-200 rounded-full items-center justify-center'>
                                 <Image source={item.icon} className="w-8 h-8" resizeMode="contain" />
                             </View>
@@ -151,7 +158,6 @@ export default function Beranda() {
                         </View>
                     ))}
                 </View>
-
 
             </ScrollView>
         </SafeAreaView>
