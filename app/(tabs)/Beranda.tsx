@@ -1,7 +1,8 @@
+import { AuthContext } from '@/src/api/AuthProvider'
 import CardEvent from '@/src/components/CardEvent'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import React from 'react'
+import React, { useContext } from 'react'
 import { SafeAreaView, View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 
 // jenis layanan masih static
@@ -21,26 +22,32 @@ const berita = [
     { id: 3, title: "Tips Hidup Sehat", img: require("../../assets/images/PagerView/view3.png"), desc: "Terdapat tiga gejala klasik diabetes yang dikenal dengan istilah 3 P, yaitu poliuri atau sering buang air..." }
 ]
 
-const Header = () => (
-    <View className='flex-row justify-between items-center px-5 py-3 mt-10 bg-gray-50 shadow'>
-        <View className='flex-row items-center'>
-            <Image
-                source={require('../../assets/icons/akun.png')}
-                className='w-12 h-12 rounded-full mr-3'
-            />
-            <View>
-                <Text className='text-base font-bold text-blue-700'>Yanto Sukiman</Text>
-                <Text className='text-base font-semibold text-gray-500'>Selamat datang👋</Text>
+const Header = () => {
+    // Variabel Logout dari Provider 
+    const { user, logout } = useContext(AuthContext)!;
+
+    return (
+        <View className='flex-row justify-between items-center px-5 py-3 mt-10 bg-gray-50 shadow'>
+            <View className='flex-row items-center'>
+                <Image
+                    source={require('../../assets/icons/akun.png')}
+                    className='w-12 h-12 rounded-full mr-3'
+                />
+                <View>
+                    <Text className='text-base font-bold text-blue-700'>Yanto Sukiman</Text>
+                    <Text className='text-base font-semibold text-gray-500'>Selamat datang👋</Text>
+                </View>
+            </View>
+            <View className='flex-row'>
+                <Ionicons name='search-outline' size={20} color="#0D4D8" style={{ marginRight: 12 }} />
+                <Ionicons name='notifications-outline' size={20} color="#0D4D8" />
             </View>
         </View>
-        <View className='flex-row'>
-            <Ionicons name='search-outline' size={20} color="#0D4D8" style={{ marginRight: 12 }} />
-            <Ionicons name='notifications-outline' size={20} color="#0D4D8" />
-        </View>
-    </View>
-);
+    )
+};
 
-export default function Beranda() {
+function Beranda() {
+
     const screenWidth = Dimensions.get("window").width;
     const itemWidth = screenWidth / 4 - 30;
     return (
@@ -76,7 +83,14 @@ export default function Beranda() {
                             style={{ width: itemWidth, alignItems: "center", marginVertical: 10 }}
                             onPress={() => {
                                 if (item.title === "Pendaftaran") {
-                                    router.push('/menus/Pendaftaran/HomeScreen')
+                                    router.push('/shared/Pendaftaran/HomeScreen')
+                                } if (item.title === "Rawat Inap") {
+                                    router.push('/admin/dokter/DokterScreen')
+                                } else {
+                                } if (item.title === "IGD") {
+                                    router.push('/admin/poli/PoliScreen')
+                                } else {
+
                                 }
                             }}>
                             <View className='w-14 h-14 bg-slate-200 rounded-full items-center justify-center'>
@@ -163,3 +177,5 @@ export default function Beranda() {
         </SafeAreaView>
     );
 }
+
+export default Beranda;

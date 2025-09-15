@@ -14,7 +14,7 @@ export function Button({ label, ...props }: ButtonProps) {
         backgroundColor: "#2563eb"
       }}
     >
-      <Text className="text-sm font-semibold text-white ">{label}</Text>
+      <Text className="text-base font-semibold text-white ">{label}</Text>
     </TouchableOpacity>
   )
 }

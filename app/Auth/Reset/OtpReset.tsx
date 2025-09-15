@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
+import api from "@/src/api/api";
+import Button from '@/src/components/Button';
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import Button from '@/src/components/Button'
-import api from "@/lib/api";
+import React, { useRef, useState } from "react";
+import { Alert, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 function OtpReset() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);

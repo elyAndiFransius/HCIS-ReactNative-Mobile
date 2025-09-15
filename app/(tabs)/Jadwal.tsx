@@ -1,15 +1,14 @@
-import api from '@/lib/api';
+import api from '@/src/api/api';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
-  View,
-  SafeAreaView,
-  Text,
-  Alert,
-  Image,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity
+    ActivityIndicator,
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    View
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

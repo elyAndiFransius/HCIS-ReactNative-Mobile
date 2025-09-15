@@ -1,14 +1,10 @@
 import BackNavbar from '@/src/components/BackNavbar'
 import Box from '@/src/components/Box'
-import InputField from '@/src/components/InputField'
 import InputFieldRightIcon from '@/src/components/InputFieldRightIcon'
 import TextDesc from '@/src/components/TextDesc'
 import TextJudul from '@/src/components/TextJudul'
-import { Ionicons } from '@expo/vector-icons'
-import { router } from 'expo-router'
 import React from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Image, Text, TouchableOpacity, View } from 'react-native'
 
 
 

@@ -1,8 +1,8 @@
-import api from '@/lib/api'
+import api from '@/src/api/api'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { Alert, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 
 function RegisterScreen() {

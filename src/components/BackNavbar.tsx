@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from "@expo/vector-icons"
 import { router } from "expo-router"
 
-export default function BackNavbar() {
+export default function BackNavbar({ label = "Kembali" }) {
     return (
         <SafeAreaView edges={["top", "left", "right"]} className="flex-row">
             <View className="flex-row">
@@ -12,7 +12,7 @@ export default function BackNavbar() {
                     <View className="flex-row ml-5 items-center">
                         <Ionicons name="chevron-back" size={28} color="#374151" />
                         <Text className="text-2xl mx-3 text-gray-700 font-semibold">
-                            Kembali
+                            {label}
                         </Text>
                     </View>
                 </TouchableOpacity>

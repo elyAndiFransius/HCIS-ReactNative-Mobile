@@ -1,9 +1,9 @@
 import Button from '@/src/components/Button'
-import InputField from '@/src/components/InputField'
+import InputField from '@/src/components/InputFieldIC'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useState } from 'react'
-import { View, TouchableOpacity, Text, Image, TextInput } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 function InputEmail() {
   const [email, setEmail] = useState('')

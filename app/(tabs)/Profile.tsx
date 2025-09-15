@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Image, ScrollView, Switch, ImageBackground, Tou
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import SwitchButton from "@/src/components/Switch";
 import { router } from 'expo-router'
-
+import { AuthContext, AuthProvider } from '@/src/api/AuthProvider';
+import { useContext } from 'react';
 
 
 
@@ -16,7 +17,7 @@ const Header = () => {
         <View className='flex-row m-5 '>
           <View className='flex m-1'>
             <Image
-              source={require('../../assets/icons/akun.png') }
+              source={require('../../assets/icons/akun.png')}
               className='w-16 h-16 border  border-gray-100 rounded-full'
             />
           </View>
@@ -34,6 +35,7 @@ const Header = () => {
 }
 
 export default function Profile() {
+  const { user, logout } = useContext(AuthContext)!;
 
   return (
     <View className='flex-1 bg-blue-400'>
@@ -128,6 +130,10 @@ export default function Profile() {
             </View>
           </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => {
+            logout();
+            router.replace('/Auth/LoginScreen')
+          }}>
             <View className="flex-row items-center justify-between px-1 py-1 rounded-lg">
               <View className="flex-row items-center">
                 <Ionicons name="log-out" size={20} color="#374151" />
@@ -137,6 +143,7 @@ export default function Profile() {
               </View>
               <Ionicons name='chevron-forward' size={18} className='m-3' />
             </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

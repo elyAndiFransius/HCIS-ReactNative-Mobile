@@ -9,7 +9,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/menus/Pendaftaran/HomeScreen"); 
+      router.replace("/Auth/LoginScreen"); 
     }, 2000);
 
     return () => clearTimeout(timer);
