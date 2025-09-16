@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BackNavbar from '@/src/components/BackNavbar';
 import Button from '@/src/components/Button';
@@ -36,6 +36,7 @@ function DetailPasienScreen() {
                 </View>
                 <View>
                     <Button
+                        onPress={ () => router.push('/shared/Pendaftaran/TujuanPoliScreen')}
                         label='Pilih Poli Tujuan'
                     />
                     <Button
