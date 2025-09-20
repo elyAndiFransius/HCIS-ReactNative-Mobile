@@ -4,14 +4,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // Definisikan tipe user
 export interface User {
   id: number;
-  name: string;
+  nama: string;
   email: string;
-  role: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (data: { user: User; access_token: string }) => Promise<void>;
+  login: (data: { user: User; token: string }) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -31,10 +30,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     loadUser();
   }, []);
 
-  const login = async (data: { user: User; access_token: string }) => {
+  const login = async (data: { user: User; token: string }) => {
     setUser(data.user);
     await AsyncStorage.setItem("user", JSON.stringify(data.user));
-    await AsyncStorage.setItem("token", data.access_token);
+    await AsyncStorage.setItem("token", data.token);
   };
 
   const logout = async () => {

@@ -46,7 +46,7 @@ function TujuanPoliScreen() {
                 return;
             }
             setLoading(true);
-            const res = await api.get('/poli/index', {
+            const res = await api.get('/poli/get', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: "Application/json"
@@ -84,7 +84,7 @@ function TujuanPoliScreen() {
                         renderItem={({ item }) => (
                             <View className="bg-white p-4 mb-3 rounded-xl shadow">
                                 <TouchableOpacity onPress={() => handlerOpenModal(item.id, item.nama)}>
-                                    <Text className="font-bold text-blue-700">{item.nama_poli}</Text>
+                                    <Text className="font-bold text-blue-700">{item.nama}</Text>
                                 </TouchableOpacity>
                             </View>
                         )}

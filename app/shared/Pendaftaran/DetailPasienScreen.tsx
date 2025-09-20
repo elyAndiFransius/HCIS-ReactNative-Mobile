@@ -1,6 +1,6 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import { router, useLocalSearchParams } from "expo-router";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BackNavbar from '@/src/components/BackNavbar';
 import Button from '@/src/components/Button';
@@ -8,7 +8,6 @@ import Button from '@/src/components/Button';
 function DetailPasienScreen() {
     const { pasien } = useLocalSearchParams();
     const data = pasien ? JSON.parse(pasien as string) : null;
-
 
     if (!data) {
         return (
@@ -20,34 +19,30 @@ function DetailPasienScreen() {
 
     return (
         <View>
-            <BackNavbar label='Data Pasien' />
+            <BackNavbar label="Data Pasien" />
             <SafeAreaView className="p-5">
-
-
                 <Text className="text-xl font-bold mb-4">Detail Pasien</Text>
-
                 <View className="space-y-10">
                     <Text>No RM: {data.no_rm}</Text>
+                    <Text>Nomor KTP: {data.no_ktp}</Text>
                     <Text>Nama: {data.nama}</Text>
                     <Text>Tanggal Lahir: {data.tgl_lahir}</Text>
-                    <Text>Jenis Kelamin: {data.jns_kelamin}</Text>
-                    <Text>Umur: {data.umur}</Text>
+                    <Text>Jenis Kelamin: {data.jenis_kelamin}</Text>
+                    <Text>Agama: {data.agama}</Text>
                     <Text>Status: {data.status}</Text>
                 </View>
                 <View>
                     <Button
-                        onPress={ () => router.push('/shared/Pendaftaran/TujuanPoliScreen')}
-                        label='Pilih Poli Tujuan'
+                        onPress={() => router.push('/shared/Pendaftaran/TujuanPoliScreen')}
+                        label="Pilih Poli Tujuan"
                     />
                     <Button
-                        label='Kembali'
-
+                        label="Kembali"
                     />
                 </View>
-
             </SafeAreaView>
         </View>
     );
 }
 
-export default DetailPasienScreen
+export default DetailPasienScreen;

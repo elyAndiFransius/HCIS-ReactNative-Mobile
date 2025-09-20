@@ -17,12 +17,12 @@ function LoginScreen() {
     try {
       const res = await api.post('/login', { email, password })
 
-      const token = res.data?.access_token
+      const token = res.data?.token
       const user = res.data?.user
 
       if (token && user) {
         // simpan lewat context
-        await login({ user, access_token: token })
+        await login({ user, token: token })
       }
 
       router.replace('/(tabs)/Beranda')

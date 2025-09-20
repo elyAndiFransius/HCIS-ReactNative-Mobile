@@ -85,10 +85,10 @@ function Beranda() {
                                 if (item.title === "Pendaftaran") {
                                     router.push('/shared/Pendaftaran/HomeScreen')
                                 } if (item.title === "Rawat Inap") {
-                                    router.push('/admin/dokter/DokterScreen')
+                                    router.push('/shared/Pendaftaran/DokterScreen')
                                 } else {
                                 } if (item.title === "IGD") {
-                                    router.push('/admin/poli/PoliScreen')
+                                    router.push('/shared/Pendaftaran/DokterScreen')
                                 } else {
 
                                 }

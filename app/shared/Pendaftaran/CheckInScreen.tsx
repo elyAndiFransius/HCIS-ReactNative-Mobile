@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router'
 import { View, Text } from 'react-native'
 import React from 'react'
+import BackNavbar from '@/src/components/BackNavbar'
 
 export default function CheckInScreen() {
     const { dokterId, namaDokter, poliId, date } = useLocalSearchParams<{
@@ -11,12 +12,15 @@ export default function CheckInScreen() {
     }>()
 
     return (
-        <View className="flex-1 justify-center items-center">
-            <Text className="text-lg font-bold">Check In</Text>
-            <Text>Dokter ID: {dokterId}</Text>
-            <Text>Poli ID: {poliId}</Text>
-            <Text>Nama: {namaDokter}</Text>
-            <Text>Tanggal: {date}</Text>
+        <View>
+            <BackNavbar  />
+            <View className="flex-1 justify-center items-center">
+                <Text className="text-lg font-bold">Check In</Text>
+                <Text>Dokter ID: {dokterId}</Text>
+                <Text>Poli ID: {poliId}</Text>
+                <Text>Nama: {namaDokter}</Text>
+                <Text>Tanggal: {date}</Text>
+            </View>
         </View>
     )
 }
