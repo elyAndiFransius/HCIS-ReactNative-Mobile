@@ -39,7 +39,7 @@ const fmt = (d?: Date | null) => {
 
 
 
-function HomeScreen() {
+function PasienUmum() {
 
     // Variable untuk inputkan pasien
     const [tgl_lahir, setTgl_Lahir] = useState<Date | null>(null);
@@ -81,7 +81,7 @@ function HomeScreen() {
             // Jika data pasien ada kita kirim ke screen lain
             if (res.data.success === true) {
                 router.push({
-                    pathname: '/shared/Pendaftaran/DetailPasienScreen',
+                    pathname: '/Pendaftaran/DataPasien',
                     params: { pasien: JSON.stringify(res.data.data) },
                 });
             } else {
@@ -180,4 +180,4 @@ function HomeScreen() {
     );
 }
 
-export default HomeScreen;
+export default PasienUmum;

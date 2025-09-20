@@ -83,7 +83,7 @@ function Beranda() {
                             style={{ width: itemWidth, alignItems: "center", marginVertical: 10 }}
                             onPress={() => {
                                 if (item.title === "Pendaftaran") {
-                                    router.push('/shared/Pendaftaran/HomeScreen')
+                                    router.push('/Pendaftaran')
                                 } if (item.title === "Rawat Inap") {
                                     router.push('/shared/Pendaftaran/DokterScreen')
                                 } else {

@@ -1,9 +1,9 @@
-import { Tabs } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Image, View } from 'react-native';
+import { Tabs } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { Image, View } from "react-native";
 import "../../styles/global.css";
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { StackActions } from '@react-navigation/native';
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StackActions } from "@react-navigation/native";
 
 export default function TabsLayout() {
     const insets = useSafeAreaInsets();
@@ -14,17 +14,23 @@ export default function TabsLayout() {
                 headerShown: false,
                 tabBarShowLabel: true,
                 tabBarStyle: {
-                    position: 'absolute',
+                    position: "absolute",
                     height: 60 + insets.bottom, // berikan pading sesui hp
                     paddingBottom: insets.bottom,
                     borderTopRightRadius: 20,
                     borderTopLeftRadius: 20,
-                    backgroundColor: '#fff'
+                    backgroundColor: "#fff",
                 },
-                tabBarActiveTintColor: '#1E3A8A',
-                tabBarInactiveTintColor: '#9CA3AF'
+                tabBarActiveTintColor: "#1E3A8A",
+                tabBarInactiveTintColor: "#9CA3AF",
             }}
         >
+            <Tabs.Screen
+                name="Pendaftaran"
+                options={{
+                    href: null, // <-- ini membuat tidak muncul di tab bar
+                }}
+            />
             <Tabs.Screen
                 name="Beranda"
                 options={{
@@ -47,23 +53,23 @@ export default function TabsLayout() {
                 name="ChatBox"
                 options={{
                     title: "Chat Box",
-                    tabBarStyle: {display : "none"},
+                    tabBarStyle: { display: "none" },
                     tabBarIcon: () => (
                         <View
                             style={{
-                                position: 'absolute',
+                                position: "absolute",
                                 top: -45,
-                                backgroundColor: '#fff',
+                                backgroundColor: "#fff",
                                 borderRadius: 50,
                                 padding: 13,
-                                shadowColor: '#000',
+                                shadowColor: "#000",
                                 shadowOpacity: 0.1,
                                 shadowRadius: 4,
                                 elevation: 5,
                             }}
                         >
                             <Image
-                                source={require('../../assets/icons/chatbot.png')}
+                                source={require("../../assets/icons/chatbot.png")}
                                 style={{ width: 43, height: 43 }}
                             />
                         </View>
@@ -88,6 +94,7 @@ export default function TabsLayout() {
                     ),
                 }}
             />
+
         </Tabs>
     );
 }
