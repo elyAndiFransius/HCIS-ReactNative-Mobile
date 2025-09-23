@@ -7,13 +7,13 @@ import { router, useLocalSearchParams } from "expo-router";
 import DoctorCard from "@/src/components/DoctorCard";
 import { STORAGE_URL } from "@/src/api/api";
 
-
 export default function PilihDokterScreen() {
     interface Jadwal {
         id_jadwal: number;
         hari: string;
         jam_mulai: string;
         jam_selesai: string;
+        status: string;
     }
 
     interface Dokter {
@@ -22,12 +22,11 @@ export default function PilihDokterScreen() {
         foto: string;
         jadwal_dokter?: Jadwal[];
     }
+
     const [loading, setLoading] = useState(true);
     const [jadwalList, setJadwalList] = useState<Dokter[]>([]);
 
-    // Variable naufal
     const { poli, tgl } = useLocalSearchParams<{ poli?: string; tgl?: string }>();
-
 
     const tanggalLabel = useMemo(() => {
         if (!tgl) return "";
@@ -39,7 +38,6 @@ export default function PilihDokterScreen() {
         return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
     }, [tgl]);
 
-
     const handlerShow = async () => {
         try {
             const token = await AsyncStorage.getItem("token");
@@ -48,7 +46,7 @@ export default function PilihDokterScreen() {
                 return;
             }
             setLoading(true);
-            // Panggil API
+
             const res = await api.get("/dokter/index", {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -56,27 +54,41 @@ export default function PilihDokterScreen() {
                 },
             });
             setJadwalList(res.data.data ?? res.data)
-            console.log("Data dokter dan jadwal dokter: ", res.data.data ?? res.data)
         } catch (err: any) {
-            console.log(err.response?.data)
+            console.log("API Error:", err.response?.data);
+            setJadwalList([]);
+            Alert.alert("Error", "Gagal memuat data dokter");
         } finally {
             setLoading(false);
         }
     };
 
+    const handlerStore = async () => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            if (!token) {
+                Alert.alert("Error", "Token tidak di temukan silahkan Login dulu");
+                return
+            }
+            const paylaod = {}
+        } catch (err: any) {
+            console.log("Error", err.response?.data || err.message);
+            Alert.alert("Erorr", err.message)
+        }
+    }
     useEffect(() => {
         handlerShow();
     }, []);
 
-
     if (loading) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
+        return (
+            <View className="flex-1 justify-center items-center">
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );
     }
 
-
-
     return (
-
         <SafeAreaView className="flex-1 bg-white">
             {/* Header */}
             <View className="px-5 pt-10 pb-3 bg-white">
@@ -105,51 +117,61 @@ export default function PilihDokterScreen() {
                 imageStyle={{ opacity: 0.00 }}
                 className="flex-1 mt-6"
             >
-
                 <ScrollView
                     className="flex-1 px-4"
                     contentContainerStyle={{ paddingBottom: 24, paddingTop: 6 }}
                 >
+                    {jadwalList.length > 0 ? (
+                        jadwalList.map((dokter) => {
+                            // Filter jadwal yang aktif saja
+                            const jadwalAktif = dokter.jadwal_dokter?.filter(jadwal => jadwal.status === 'aktif') || [];
 
-                    {jadwalList.map((dokter) =>
-                        Array.isArray(dokter.jadwal_dokter) && dokter.jadwal_dokter.length > 0 ? (
-                            dokter.jadwal_dokter.map((jadwal) => (
-                                <DoctorCard
-                                    key={jadwal.id_jadwal}
-                                    name={dokter.nama}          // nama dokter
-                                    avatar={`http://192.168.0.105:8000/storage/foto_dokter/foto_dokter.png`}
-                                    day={jadwal.hari}           // hari dari jadwal
-                                    time_start={jadwal.jam_mulai}     // jam mulai dari jadwal
-                                    time_end={jadwal.jam_selesai}     // jam mulai dari jadwal
-                                    onPress={() => {
-                                        router.push({
-                                            pathname: "/example/test",
-                                            params: {
-                                                dokter: dokter.nama,
-                                                poli,
-                                                tgl,
-                                                jam: jadwal.jam_mulai,
-                                            },
-                                        });
-                                    }}
-                                />
-
-                            ))
-                        ) : (
-                            <DoctorCard
-                                key={dokter.id_dokter}
-                                name={dokter.nama}
-                                avatar={`${STORAGE_URL}/${dokter.foto}`}
-                                day="Tidak ada jadwal"
-                                time_start="-"
-                                time_end="-"
-                                onPress={() => { }}
-                            />
-                        )
+                            if (jadwalAktif.length > 0) {
+                                // Jika ada jadwal aktif, tampilkan per jadwal
+                                return jadwalAktif.map((jadwal) => (
+                                    <DoctorCard
+                                        key={`${dokter.id_dokter}-${jadwal.id_jadwal}`}
+                                        name={dokter.nama}
+                                        avatar={dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`}
+                                        day={jadwal.hari}
+                                        time_start={jadwal.jam_mulai}
+                                        time_end={jadwal.jam_selesai}
+                                        onPress={() => {
+                                            router.push({
+                                                pathname: "/Pendaftaran/NoAntrian",
+                                                params: {
+                                                    dokter: dokter.nama,
+                                                    poli,
+                                                    tgl,
+                                                    jam: jadwal.jam_mulai,
+                                                },
+                                            });
+                                        }}
+                                    />
+                                ));
+                            } else {
+                                // Jika tidak ada jadwal aktif, tampilkan dokter tanpa jadwal
+                                return (
+                                    <DoctorCard
+                                        key={dokter.id_dokter}
+                                        name={dokter.nama}
+                                        avatar={dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`}
+                                        day="Tidak ada jadwal"
+                                        time_start="-"
+                                        time_end="-"
+                                        onPress={() => { }}
+                                    />
+                                );
+                            }
+                        })
+                    ) : (
+                        <View className="flex-1 justify-center items-center py-20">
+                            <Text className="text-gray-500 text-center">
+                                Tidak ada dokter tersedia
+                            </Text>
+                        </View>
                     )}
-
                 </ScrollView>
-
             </ImageBackground>
         </SafeAreaView>
     );

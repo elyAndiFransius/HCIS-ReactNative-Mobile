@@ -60,25 +60,25 @@ export default function index() {
                     <View className="flex-row justify-between flex-wrap px-1 pb-2">
                         <CategoryCard
                             title="PASIEN UMUM"
-                            imageSource={require("../../../assets/images/event/pendaftaran.png")}
+                            imageSource={require("../../../assets/images/Icon/image 80.png")}
                             imageSize={58}
                             onPress={() => router.push("/(tabs)/Pendaftaran/PasienUmum")}
                         />
                         <CategoryCard
                             title="PASIEN PT. TIMAH"
-                            imageSource={require("../../../assets/images/event/rumah_sakit.png")} // ganti dengan logo timah jika ada
+                            imageSource={require("../../../assets/images/Icon/image 79.png")} // ganti dengan logo timah jika ada
                             imageSize={58}
                             onPress={() => router.push("/example/test")}
                         />
                         <CategoryCard
                             title="ASURANSI LAINNYA"
-                            imageSource={require("../../../assets/images/event/mcu.png")}
+                            imageSource={require("../../../assets/images/Icon/image 83.png")}
                             imageSize={58}
                             onPress={() => router.push("/example/test")}
                         />
                         <CategoryCard
                             title="PASIEN BPJS"
-                            imageSource={require("../../../assets/images/event/poli.png")} // ganti dengan logo BPJS jika ada
+                            imageSource={require("../../../assets/images/Icon/image 84.png")} // ganti dengan logo BPJS jika ada
                             imageSize={58}
                             onPress={() => router.push("/example/test")}
                         />

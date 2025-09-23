@@ -18,13 +18,6 @@ function PoliKlinik() {
   const [poliList, setPoliList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Modal & date picker state
-  const [showModal, setShowModal] = useState(false)
-  const [selectedPoliId, setSelectedPoliId] = useState<number | null>(null)
-  const [selectPoliName, setSelectPoliName] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [showPicker, setShowPicker] = useState(false)
-
 
   // Dari naufal 
   const [selectedPoli, setSelectedPoli] = useState<string | null>(null);

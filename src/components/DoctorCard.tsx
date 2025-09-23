@@ -40,7 +40,7 @@ export default function DoctorCard({
             <View className="flex-row items-center bg-slate-400">
                 <Image
                     source={src}
-                    style={{ width: 48, height: 48, borderRadius: 24, marginRight: 12,  backgroundColor: "red" }}
+                    style={{ width: 48, height: 48, borderRadius: 24, marginRight: 12, backgroundColor: "red" }}
                 />
                 <Text className="flex-1 text-[16px] font-extrabold text-[#1F5EA8]">
                     {name}
@@ -56,7 +56,6 @@ export default function DoctorCard({
             </View>
         </View>
     );
-console.log("DoctorCard avatar src:", src);
 
     return onPress ? (
         <TouchableOpacity activeOpacity={0.85} onPress={onPress}>

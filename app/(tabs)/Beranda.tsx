@@ -106,18 +106,33 @@ function Beranda() {
                 <View className="px-4 mt-2 mb-2">
                     <Text className="font-bold mb-2  text-sm text-blue-700">Pendaftaran Aktif</Text>
 
-                    <View className="flex-row bg-white justify-between items-center rounded-lg shadow p-4 w-full">
+                    <View className="flex-row bg-white items-center rounded-lg shadow p-4">
                         {/* Foto Dokter */}
                         <Image
-                            source={{ uri: "https://i.pravatar.cc/100" }}
-                            className="w-16 h-16 md:w-20 md:h-20 rounded-full"
+                            source={require('../../assets/icons/akun.png')}
+                            className="w-20 h-20 md:w-72 md:h-80 rounded-full"
                             resizeMode="cover"
                         />
 
-                        {/* Info Dokter */}
-                        <View className="flex-1 px-3">
-                            <Text className="font-semibold text-sm md:text-base">Dr. Yanto Sukiman</Text>
-                            <Text className="text-gray-600 text-xs md:text-sm">Layanan: Rawat Inap</Text>
+                        {/* Nomor antrian dan Descriptio */}
+                        <View className='flex-row justify-between '>
+                            <View className="flex-1">
+                                <Text className="font-semibold text-sm md:text-base">Dr. Yanto Sukiman</Text>
+                                <Text className="text-gray-600 text-xs md:text-sm">POLI: MATA</Text>
+                                <Text className="text-gray-600 text-xs md:text-sm">3 HARI</Text>
+                            </View>
+
+                            <View className="flex-1 items-center">
+                                <Text className="font-semibold text-sm md:text-base">No Antrian</Text>
+                                <Text className="font-bold text-2xl md:text-3xl text-green-600">5</Text>
+                            </View>
+                        </View>
+                        {/* Info Antrian, Tanggal, dan Jam */}
+                        <View className='flex-row justify-between'>
+                            <View className="flex-row items-center py-1 px-2 rounded-xl bg-gray-300 mt-1">
+                                <Ionicons name="time-outline" size={16} />
+                                <Text className="ml-1 text-xs md:text-sm">09:00-13:00</Text>
+                            </View>
 
                             <View className="flex-row items-center bg-green-200 mt-2 py-1 px-2 rounded-xl">
                                 <Ionicons name="calendar" size={16} />
@@ -127,16 +142,7 @@ function Beranda() {
                             </View>
                         </View>
 
-                        {/* Info Antrian */}
-                        <View className="items-center">
-                            <Text className="font-bold text-xs md:text-base">No Antrian</Text>
-                            <Text className="font-bold text-2xl md:text-3xl text-green-600">5</Text>
 
-                            <View className="flex-row items-center py-1 px-2 rounded-xl bg-gray-300 mt-1">
-                                <Ionicons name="time-outline" size={16} />
-                                <Text className="ml-1 text-xs md:text-sm">09:00-13:00</Text>
-                            </View>
-                        </View>
                     </View>
                 </View>
 
