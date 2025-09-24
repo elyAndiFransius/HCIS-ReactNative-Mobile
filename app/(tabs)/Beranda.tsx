@@ -110,13 +110,13 @@ function Beranda() {
                         {/* Foto Dokter */}
                         <Image
                             source={require('../../assets/icons/akun.png')}
-                            className="w-20 h-20 md:w-72 md:h-80 rounded-full"
+                            className="w-14 h-14 md:w-72 md:h-80 rounded-full"
                             resizeMode="cover"
                         />
 
                         {/* Nomor antrian dan Descriptio */}
                         <View className='flex-row justify-between '>
-                            <View className="flex-1">
+                            <View className="flex-1 ml-5">
                                 <Text className="font-semibold text-sm md:text-base">Dr. Yanto Sukiman</Text>
                                 <Text className="text-gray-600 text-xs md:text-sm">POLI: MATA</Text>
                                 <Text className="text-gray-600 text-xs md:text-sm">3 HARI</Text>

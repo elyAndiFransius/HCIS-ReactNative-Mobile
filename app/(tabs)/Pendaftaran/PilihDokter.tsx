@@ -1,13 +1,30 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { View, Text, ActivityIndicator, FlatList, Alert, TurboModuleRegistry, Image, ImageBackground, SafeAreaView, ScrollView } from "react-native";
-import api from "@/src/api/api";
+import {
+    View,
+    Text,
+    ActivityIndicator,
+    FlatList,
+    Alert,
+    ImageBackground,
+    SafeAreaView,
+    TouchableOpacity,
+} from "react-native";
+import api, { STORAGE_URL } from "@/src/api/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import DoctorCard from "@/src/components/DoctorCard";
-import { STORAGE_URL } from "@/src/api/api";
+import SuccessModal from "@/src/components/SuccessModal";
 
 export default function PilihDokterScreen() {
+    const { pasien, poli, tgl } = useLocalSearchParams<{
+        poli?: string;
+        pasien?: string;
+        tgl?: string;
+    }>();
+
+    const DataPasien = pasien ? JSON.parse(pasien as string) : null;
+
     interface Jadwal {
         id_jadwal: number;
         hari: string;
@@ -24,9 +41,8 @@ export default function PilihDokterScreen() {
     }
 
     const [loading, setLoading] = useState(true);
-    const [jadwalList, setJadwalList] = useState<Dokter[]>([]);
-
-    const { poli, tgl } = useLocalSearchParams<{ poli?: string; tgl?: string }>();
+    const [dokterData, setDokterData] = useState<any[]>([]);
+    const [open, setOpen] = useState(false);
 
     const tanggalLabel = useMemo(() => {
         if (!tgl) return "";
@@ -53,10 +69,50 @@ export default function PilihDokterScreen() {
                     Accept: "application/json",
                 },
             });
-            setJadwalList(res.data.data ?? res.data)
+            console.log("API Response:", res.data);
+
+            const dokterList: Dokter[] = Array.isArray(res.data?.data)
+                ? res.data.data
+                : Array.isArray(res.data)
+                    ? res.data
+                    : [];
+                    
+            // 🔑 Flatten dokter + jadwal jadi list
+            const flattened = dokterList.flatMap((dokter) => {
+                const jadwalAktif =
+                    dokter.jadwal_dokter?.filter((j) => j.status === "aktif") || [];
+
+                if (jadwalAktif.length > 0) {
+                    return jadwalAktif.map((jadwal) => ({
+                        key: `${dokter.id_dokter}-${jadwal.id_jadwal}`,
+                        name: dokter.nama,
+                        avatar:
+                            dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`,
+                        day: jadwal.hari,
+                        time_start: jadwal.jam_mulai,
+                        time_end: jadwal.jam_selesai,
+                        id_dokter: dokter.id_dokter,
+                    }));
+                } else {
+                    return [
+                        {
+                            key: dokter.id_dokter,
+                            name: dokter.nama,
+                            avatar:
+                                dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`,
+                            day: "Tidak ada jadwal",
+                            time_start: "-",
+                            time_end: "-",
+                            id_dokter: dokter.id_dokter,
+                        },
+                    ];
+                }
+            });
+
+            setDokterData(flattened);
         } catch (err: any) {
-            console.log("API Error:", err.response?.data);
-            setJadwalList([]);
+            console.log("API Error:", err.response?.data || err.message); // ✅ lebih aman
+            setDokterData([]);
             Alert.alert("Error", "Gagal memuat data dokter");
         } finally {
             setLoading(false);
@@ -65,17 +121,40 @@ export default function PilihDokterScreen() {
 
     const handlerStore = async () => {
         try {
-            const token = await AsyncStorage.getItem('token');
+            const token = await AsyncStorage.getItem("token");
             if (!token) {
                 Alert.alert("Error", "Token tidak di temukan silahkan Login dulu");
-                return
+                return;
             }
-            const paylaod = {}
+            const payload = {
+                kode_booking: "BOOK123456",
+                limit_waktu: "14:30:00",
+                status: "sudah",
+                tanggal: "2025-09-22",
+                kode: 1,
+                id_list_poli: "04334b82-971f-3abe-accf-22ac532a95a7",
+                id_dokter: "DK064",
+                id_antrian: "AT34",
+            };
+
+            const res = await api.post("/pembayaran/store", payload, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            });
+
+            if (res.data.success === true) {
+                setOpen(true);
+            } else {
+                Alert.alert("Gagal", res.data.message || "Terjadi kesalahan");
+            }
         } catch (err: any) {
             console.log("Error", err.response?.data || err.message);
-            Alert.alert("Erorr", err.message)
+            Alert.alert("Error", err.message);
         }
-    }
+    };
+
     useEffect(() => {
         handlerShow();
     }, []);
@@ -100,7 +179,8 @@ export default function PilihDokterScreen() {
                         onPress={() => router.back()}
                     />
                     <Text className="ml-2 text-lg font-extrabold text-[#0D4D8F]">
-                        {`Silahkan Pilih Dokter ${poli ? `Poli ${poli}` : "Poli"}`}
+                        {`Silahkan Pilih Dokter ${poli ? `Poli ${poli}` : "Poli"
+                            }`}
                     </Text>
                 </View>
                 {!!tanggalLabel && (
@@ -110,69 +190,46 @@ export default function PilihDokterScreen() {
                 )}
             </View>
 
-            {/* Body */}
+            {/* Body pakai FlatList */}
             <ImageBackground
                 source={require("../../../assets/images/bgprofilee.png")}
                 resizeMode="contain"
-                imageStyle={{ opacity: 0.00 }}
+                imageStyle={{ opacity: 0.0 }}
                 className="flex-1 mt-6"
             >
-                <ScrollView
-                    className="flex-1 px-4"
-                    contentContainerStyle={{ paddingBottom: 24, paddingTop: 6 }}
-                >
-                    {jadwalList.length > 0 ? (
-                        jadwalList.map((dokter) => {
-                            // Filter jadwal yang aktif saja
-                            const jadwalAktif = dokter.jadwal_dokter?.filter(jadwal => jadwal.status === 'aktif') || [];
-
-                            if (jadwalAktif.length > 0) {
-                                // Jika ada jadwal aktif, tampilkan per jadwal
-                                return jadwalAktif.map((jadwal) => (
-                                    <DoctorCard
-                                        key={`${dokter.id_dokter}-${jadwal.id_jadwal}`}
-                                        name={dokter.nama}
-                                        avatar={dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`}
-                                        day={jadwal.hari}
-                                        time_start={jadwal.jam_mulai}
-                                        time_end={jadwal.jam_selesai}
-                                        onPress={() => {
-                                            router.push({
-                                                pathname: "/Pendaftaran/NoAntrian",
-                                                params: {
-                                                    dokter: dokter.nama,
-                                                    poli,
-                                                    tgl,
-                                                    jam: jadwal.jam_mulai,
-                                                },
-                                            });
-                                        }}
-                                    />
-                                ));
-                            } else {
-                                // Jika tidak ada jadwal aktif, tampilkan dokter tanpa jadwal
-                                return (
-                                    <DoctorCard
-                                        key={dokter.id_dokter}
-                                        name={dokter.nama}
-                                        avatar={dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`}
-                                        day="Tidak ada jadwal"
-                                        time_start="-"
-                                        time_end="-"
-                                        onPress={() => { }}
-                                    />
-                                );
-                            }
-                        })
-                    ) : (
+                <FlatList
+                    data={dokterData}
+                    contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
+                    keyExtractor={(item) => item.key}
+                    ListEmptyComponent={() => (
                         <View className="flex-1 justify-center items-center py-20">
                             <Text className="text-gray-500 text-center">
                                 Tidak ada dokter tersedia
                             </Text>
                         </View>
                     )}
-                </ScrollView>
+                    renderItem={({ item }) => (
+                        <DoctorCard
+                            name={item.name}
+                            avatar={item.avatar}
+                            day={item.day}
+                            time_start={item.time_start}
+                            time_end={item.time_end}
+                            onPress={handlerStore}
+                        />
+                    )}
+                />
             </ImageBackground>
+
+            {/* Modal Berhasil */}
+            <SuccessModal
+                visible={open}
+                onClose={() => {
+                    setOpen(false);
+                    router.push("/(tabs)/Beranda");
+                }}
+                message="Data berhasil disimpan!"
+            />
         </SafeAreaView>
     );
 }

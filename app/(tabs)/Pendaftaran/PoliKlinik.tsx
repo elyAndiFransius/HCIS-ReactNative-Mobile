@@ -1,78 +1,73 @@
 import api from '@/src/api/api';
-import BackNavbar from '@/src/components/BackNavbar'
-import React, { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   ActivityIndicator, Alert, FlatList, SafeAreaView, Text, TouchableOpacity, Platform,
-  View, Modal, ImageBackground, ScrollView
-} from 'react-native'
-import { router, useNavigation } from 'expo-router'
-import DateTimePicker, { DateTimePickerEvent, } from "@react-native-community/datetimepicker";
+  View, Modal, ImageBackground
+} from 'react-native';
+import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Ionicons } from '@expo/vector-icons';
 import PoliItemCard from '@/src/components/PoliItemCard';
-
-
 
 function PoliKlinik() {
   const navigation = useNavigation();
   const [poliList, setPoliList] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // mengampil data pasien yang di kirimkana dari screen yang sebelumnnya
+  const { pasien } = useLocalSearchParams();
+  const DataPasien = pasien ? JSON.parse(pasien as string) : null;
 
-  // Dari naufal 
   const [selectedPoli, setSelectedPoli] = useState<string | null>(null);
-  const [isCalendarModalOpen, setCalendarModalOpen] = useState(false); // modal putih kamu
-  const [showRNPicker, setShowRNPicker] = useState(false); // dialog native Android
+  const [isCalendarModalOpen, setCalendarModalOpen] = useState(false);
+  const [showRNPicker, setShowRNPicker] = useState(false);
   const [date, setDate] = useState(new Date());
+
+  // Fungsi untuk mengambil tanggal hari ini
   const handleToday = () => setDate(new Date());
 
+  // Fungsi untuk melakukan format tanggal dari anggka -> Nama bukan
   const fmt = (d: Date) => {
-    const bulan = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "Mei",
-      "Jun",
-      "Jul",
-      "Agu",
-      "Sep",
-      "Okt",
-      "Nov",
-      "Des",
-    ];
+    const bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
     return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
   };
 
+  // Fungsi untuk Mengambil 1 buat array data
   const handleSelectPoli = (name: string) => {
     setSelectedPoli(name);
-    setCalendarModalOpen(true); // buka modal putih SEKALI
+    setCalendarModalOpen(true);
   };
 
+  // Funsi untuk mengambil inputan tanggal
   const onAndroidChange = (e: DateTimePickerEvent, d?: Date) => {
-    // dialog native Android -> tutup setelah ada hasil apapun
     if (e.type === "set" && d) setDate(d);
-    setShowRNPicker(false); // PENTING: jangan biarkan tetap true
+    setShowRNPicker(false);
   };
 
+  // Fungsi untuk membatalkan inptan tanggal
   const handleCancel = () => {
     setCalendarModalOpen(false);
     setSelectedPoli(null);
     setShowRNPicker(false);
   };
 
+  // Fungsi untuk untuk menggirimkan data ke screen PoliScreen
   const handlePick = () => {
     if (!selectedPoli) return;
     setCalendarModalOpen(false);
     setShowRNPicker(false);
     router.push({
       pathname: "/Pendaftaran/PilihDokter",
-      params: { poli: selectedPoli, tgl: date.toISOString() },
+      params: {
+        poli: JSON.stringify(selectedPoli),
+        pasien: JSON.stringify(DataPasien),
+        tgl: date.toISOString(),
+      },
     });
   };
 
-
-
+  // Fungsi untuk mengambil data poli selurunya
   const getPoli = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
@@ -84,11 +79,10 @@ function PoliKlinik() {
       const res = await api.get('/poli/index', {
         headers: {
           Authorization: `Bearer ${token}`,
-          Accept: "Application/json"
-        }
+          Accept: "Application/json",
+        },
       });
-
-      setPoliList(res.data.data ?? res.data)
+      setPoliList(res.data.data ?? res.data);
     } catch (err: any) {
       console.log(err.response?.data);
     } finally {
@@ -96,9 +90,10 @@ function PoliKlinik() {
     }
   };
 
+  // Untuk menampilkan ke emulator semua data yang dari fungsi getPoli
   useEffect(() => {
     getPoli();
-  }, [])
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -117,25 +112,29 @@ function PoliKlinik() {
         </View>
       </View>
 
-      {/* Body + watermark */}
+      {/* Body pakai FlatList + watermark */}
       <ImageBackground
         source={require("../../../assets/images/bgprofilee.png")}
         resizeMode="contain"
         imageStyle={{ opacity: 0.06 }}
         className="flex-1"
       >
-        <ScrollView
-          className="flex-1 px-4"
-          contentContainerStyle={{ paddingBottom: 24, paddingTop: 6 }}
-        >
-          {poliList.map((p) => (
-            <PoliItemCard
-              key={p.id_list_poli}
-              title={p.nama}
-              onPress={() => handleSelectPoli(p.nama)}
-            />
-          ))}
-        </ScrollView>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0D4D8F" className="mt-10" />
+        ) : (
+          // Untuk menampilkan data dari json 
+          <FlatList
+            data={poliList}
+            keyExtractor={(item) => item.id_list_poli.toString()}
+            contentContainerStyle={{ paddingBottom: 24, paddingTop: 6, paddingHorizontal: 16 }}
+            renderItem={({ item }) => (
+              <PoliItemCard
+                title={item.nama}
+                onPress={() => handleSelectPoli(item.nama)} // menggunakan fungsi handkeSelectPoli yang di select
+              />
+            )}
+          />
+        )}
       </ImageBackground>
 
       {/* Modal Kalender */}
@@ -181,7 +180,6 @@ function PoliKlinik() {
             {/* Area kalender */}
             <View className="rounded-xl border border-gray-200 p-4 items-center">
               {Platform.OS === "ios" ? (
-                // iOS: inline (tidak membuka dialog kedua)
                 <DateTimePicker
                   value={date}
                   mode="date"
@@ -190,7 +188,6 @@ function PoliKlinik() {
                 />
               ) : (
                 <>
-                  {/* Android: tombol untuk membuka dialog native */}
                   <TouchableOpacity
                     activeOpacity={0.9}
                     onPress={() => setShowRNPicker(true)}
@@ -199,13 +196,12 @@ function PoliKlinik() {
                     <Text className="text-gray-800">{fmt(date)}</Text>
                   </TouchableOpacity>
 
-                  {/* Dialog native Android: render hanya saat diminta */}
                   {showRNPicker && (
                     <DateTimePicker
                       value={date}
                       mode="date"
                       display="calendar"
-                      onChange={onAndroidChange} // SELALU menutup dialog
+                      onChange={onAndroidChange}
                       minimumDate={new Date()}
                     />
                   )}
@@ -232,7 +228,7 @@ function PoliKlinik() {
         </View>
       </Modal>
     </SafeAreaView>
-  )
+  );
 }
 
-export default PoliKlinik
+export default PoliKlinik;

@@ -6,7 +6,7 @@ import {
     ImageBackground,
     TouchableOpacity,
 } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, usePathname } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -129,7 +129,11 @@ function DataPasien() {
                     <View className="w-full max-w-md">
                         <TouchableOpacity
                             className="bg-[#1F5EA8] rounded-xl items-center py-3 mb-3"
-                            onPress={() => router.push("/Pendaftaran/PoliKlinik")}
+                            onPress={() =>
+                                router.push({
+                                    pathname: "/Pendaftaran/PoliKlinik",
+                                    params: { pasien },
+                                })}
                         >
                             <Text className="text-white font-extrabold text-base">
                                 Pilih Poli Tujuan
@@ -147,7 +151,7 @@ function DataPasien() {
                     </View>
                 </ScrollView>
             </ImageBackground>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 }
 

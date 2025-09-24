@@ -77,7 +77,6 @@ function PasienUmum() {
 
             });
 
-
             // Jika data pasien ada kita kirim ke screen lain
             if (res.data.success === true) {
                 router.push({
@@ -87,7 +86,6 @@ function PasienUmum() {
             } else {
                 Alert.alert("Gagal", res.data.message || "Terjadi kesalahan");
             }
-
         } catch (err: any) {
             console.log(err.response?.data || err.message);
 
@@ -143,20 +141,14 @@ function PasienUmum() {
                             value={no_rm}
                             onChangeText={SetNo_rm}
                             containerClassName="w-full mb-5"
-                            autoCapitalize='none'
-                        />
+                            autoCapitalize='none' />
 
                         <Text className="text-[13px] font-semibold text-gray-800 mt-5 mb-1">Tanggal Lahir</Text>
                         <TouchableOpacity
                             activeOpacity={0.85}
                             onPress={() => setShowPicker(true)}
-                            className="flex-row items-center bg-gray-100 border border-gray-400 rounded-lg px-4 py-3 w-full mb-5"
-                        >
-                            <Text
-                                className={`flex-1 text-base ${tgl_lahir ? "text-gray-800" : "text-gray-400"}`}
-                            >
-                                {tgl_lahir ? fmt(tgl_lahir) : "DD-MM-YYYY"}
-                            </Text>
+                            className="flex-row items-center bg-gray-100 border border-gray-400 rounded-lg px-4 py-3 w-full mb-5">
+                            <Text className={`flex-1 text-base ${tgl_lahir ? "text-gray-800" : "text-gray-400"}`}>{tgl_lahir ? fmt(tgl_lahir) : "DD-MM-YYYY"}</Text>
                             <Ionicons name="calendar-outline" size={20} color="#374151" />
                         </TouchableOpacity>
 
@@ -166,8 +158,7 @@ function PasienUmum() {
                                 mode="date"
                                 display={Platform.OS === "ios" ? "inline" : "default"}
                                 onChange={onPickDate}
-                                maximumDate={new Date()}
-                            />
+                                maximumDate={new Date()} />
                         )}
 
                         <View className="mt-8">
