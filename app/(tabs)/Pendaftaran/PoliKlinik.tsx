@@ -9,6 +9,7 @@ import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Ionicons } from '@expo/vector-icons';
 import PoliItemCard from '@/src/components/PoliItemCard';
+import { getPoliById, getPoliList } from '@/src/services/poliService';
 
 function PoliKlinik() {
   const navigation = useNavigation();
@@ -34,8 +35,8 @@ function PoliKlinik() {
   };
 
   // Fungsi untuk Mengambil 1 buat array data
-  const handleSelectPoli = (name: string) => {
-    setSelectedPoli(name);
+  const handleSelectPoli = (item: any) => {
+    setSelectedPoli(item);
     setCalendarModalOpen(true);
   };
 
@@ -51,18 +52,41 @@ function PoliKlinik() {
     setSelectedPoli(null);
     setShowRNPicker(false);
   };
+  // fungsi untuk mengambil 1 buah data langsung
+  const handleSelectPoliById = async (id: string) => {
+    try {
+      const poli = await getPoliById(id);
+      setSelectedPoli(poli);
+      setCalendarModalOpen(false);
+      setShowRNPicker(false);
+      router.push({
+        pathname: "/Pendaftaran/PilihDokter",
+        params: {
+          poli: JSON.stringify(selectedPoli),
+          pasien: JSON.stringify(DataPasien),
+          tgl: date.toISOString(),
+        },
+      });
+      console.log("heyy:", poli)
+    } catch (err: any) {
+      console.log(err.response?.data);
+    }
+  }
+
 
   // Fungsi untuk untuk menggirimkan data ke screen PoliScreen
   const handlePick = () => {
     if (!selectedPoli) return;
+
     setCalendarModalOpen(false);
     setShowRNPicker(false);
+
     router.push({
       pathname: "/Pendaftaran/PilihDokter",
       params: {
-        poli: JSON.stringify(selectedPoli),
-        pasien: JSON.stringify(DataPasien),
-        tgl: date.toISOString(),
+        poli: JSON.stringify(selectedPoli),   // kirim object poli
+        pasien: JSON.stringify(DataPasien),   // kirim data pasien
+        tgl: date.toISOString(),              // kirim tanggal
       },
     });
   };
@@ -70,25 +94,15 @@ function PoliKlinik() {
   // Fungsi untuk mengambil data poli selurunya
   const getPoli = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        Alert.alert("Error", "Token tidak ditemukan, silahkan login dulu!");
-        return;
-      }
       setLoading(true);
-      const res = await api.get('/poli/index', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: "Application/json",
-        },
-      });
-      setPoliList(res.data.data ?? res.data);
+      const list = await getPoliList();
+      setPoliList(list);
     } catch (err: any) {
       console.log(err.response?.data);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   // Untuk menampilkan ke emulator semua data yang dari fungsi getPoli
   useEffect(() => {
@@ -130,7 +144,7 @@ function PoliKlinik() {
             renderItem={({ item }) => (
               <PoliItemCard
                 title={item.nama}
-                onPress={() => handleSelectPoli(item.nama)} // menggunakan fungsi handkeSelectPoli yang di select
+                onPress={() => handleSelectPoli(item)}// menggunakan fungsi handkeSelectPoli yang di select
               />
             )}
           />
@@ -211,16 +225,11 @@ function PoliKlinik() {
 
             {/* Actions */}
             <View className="flex-row justify-between mt-4">
-              <TouchableOpacity
-                onPress={handleCancel}
-                className="flex-1 mr-2 bg-gray-100 rounded-xl py-3 items-center"
-              >
+              <TouchableOpacity onPress={handleCancel} className="flex-1 mr-2 bg-gray-100 rounded-xl py-3 items-center">
                 <Text className="font-semibold text-gray-700">Batal</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handlePick}
-                className="flex-1 ml-2 bg-[#1F5EA8] rounded-xl py-3 items-center"
-              >
+
+              <TouchableOpacity onPress={handlePick} className="flex-1 ml-2 bg-[#1F5EA8] rounded-xl py-3 items-center">
                 <Text className="font-extrabold text-white">Pilih</Text>
               </TouchableOpacity>
             </View>

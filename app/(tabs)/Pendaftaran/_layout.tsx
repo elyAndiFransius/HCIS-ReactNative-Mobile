@@ -7,6 +7,7 @@ export default function PendaftaranStackLayout() {
             <Stack.Screen name="DataPasien" />
             <Stack.Screen name="PoliKlinik" />
             <Stack.Screen name="PasienUmum" />
+            <Stack.Screen name="DetailTransaksi" />
         </Stack>
     );
 }

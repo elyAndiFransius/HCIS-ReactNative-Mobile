@@ -15,16 +15,34 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
 import DoctorCard from "@/src/components/DoctorCard";
 import SuccessModal from "@/src/components/SuccessModal";
+import { getDokterById } from "@/src/services/dokterService";
 
 export default function PilihDokterScreen() {
+    const [loading, setLoading] = useState(true);
+    const [dokterData, setDokterData] = useState<any[]>([]);
+    const [open, setOpen] = useState(false);
+    const [selectDokter, setSelectDokter] = useState<string | null>(null);
+
+    // Mengambil data yang di kirimkan secara local
     const { pasien, poli, tgl } = useLocalSearchParams<{
         poli?: string;
         pasien?: string;
         tgl?: string;
     }>();
+    console.log(poli)
 
-    const DataPasien = pasien ? JSON.parse(pasien as string) : null;
+    // format tanggal biar bisa kita storekan data nya laravel
+    const date = new Date();
+    const formatData = date.toISOString().split("T")[0];
+    const DataPasien = pasien ? JSON.parse(pasien as string) : null; // Mengambil data pasien
+    const DataPoli = poli ? JSON.parse(poli as string) : null;
 
+    console.log("Ini data pasien", DataPasien.no_ktp)
+    console.log("Ini data Poli", DataPoli)
+    console.log("Ini data Tanggal", formatData)
+
+
+    // Fungsi untuk menampung data Jadwal
     interface Jadwal {
         id_jadwal: number;
         hari: string;
@@ -33,6 +51,7 @@ export default function PilihDokterScreen() {
         status: string;
     }
 
+    // Fungsi untuk menampung seluruh data Dokter dan Jadwal
     interface Dokter {
         id_dokter: string;
         nama: string;
@@ -40,10 +59,7 @@ export default function PilihDokterScreen() {
         jadwal_dokter?: Jadwal[];
     }
 
-    const [loading, setLoading] = useState(true);
-    const [dokterData, setDokterData] = useState<any[]>([]);
-    const [open, setOpen] = useState(false);
-
+    // Format tanggal untuk menampilkan nama bulan
     const tanggalLabel = useMemo(() => {
         if (!tgl) return "";
         const d = new Date(tgl);
@@ -54,6 +70,7 @@ export default function PilihDokterScreen() {
         return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
     }, [tgl]);
 
+
     const handlerShow = async () => {
         try {
             const token = await AsyncStorage.getItem("token");
@@ -62,6 +79,7 @@ export default function PilihDokterScreen() {
                 return;
             }
             setLoading(true);
+            setDokterData([]); // kita reset data sebelum di fetch
 
             const res = await api.get("/dokter/index", {
                 headers: {
@@ -69,25 +87,22 @@ export default function PilihDokterScreen() {
                     Accept: "application/json",
                 },
             });
-            console.log("API Response:", res.data);
+            const rawData = res.data?.data || res.data || [];
 
-            const dokterList: Dokter[] = Array.isArray(res.data?.data)
-                ? res.data.data
-                : Array.isArray(res.data)
-                    ? res.data
-                    : [];
-                    
-            // 🔑 Flatten dokter + jadwal jadi list
+            // Memastikan data yang dikirimkan server dalam berntuk array
+            const dokterList: Dokter[] = Array.isArray(rawData) ? rawData : [];
+
+
+            //  Flatten dokter + jadwal jadi list
             const flattened = dokterList.flatMap((dokter) => {
-                const jadwalAktif =
-                    dokter.jadwal_dokter?.filter((j) => j.status === "aktif") || [];
-
+                const jadwalAktif = dokter.jadwal_dokter?.filter((j) => j.status === "aktif") || []; // Filter data dokter yang aktif
                 if (jadwalAktif.length > 0) {
                     return jadwalAktif.map((jadwal) => ({
                         key: `${dokter.id_dokter}-${jadwal.id_jadwal}`,
                         name: dokter.nama,
-                        avatar:
-                            dokter.foto || `${STORAGE_URL}/foto_dokter/default.png`,
+                        avatar: dokter.foto
+                            ? `${STORAGE_URL}${dokter.foto}`
+                            : `${STORAGE_URL}default.png`,
                         day: jadwal.hari,
                         time_start: jadwal.jam_mulai,
                         time_end: jadwal.jam_selesai,
@@ -109,57 +124,47 @@ export default function PilihDokterScreen() {
                 }
             });
 
-            setDokterData(flattened);
+            setDokterData(flattened); // Menyimapan data
         } catch (err: any) {
-            console.log("API Error:", err.response?.data || err.message); // ✅ lebih aman
-            setDokterData([]);
+            console.log("API Error:", err.response?.data || err.message);
+            console.log("Ini data yang masuk ke error:", setDokterData)
             Alert.alert("Error", "Gagal memuat data dokter");
         } finally {
             setLoading(false);
         }
     };
 
-    const handlerStore = async () => {
+    const handleSelectDokterId = (item: any) => {
+        setSelectDokter(item)
+        console.log("Data yang kamu Pick ============", item)
+
+        router.push({
+            pathname: "/Pendaftaran/DetailTransaksi",
+            params: {
+                dokter: JSON.stringify(item) // Gunakan item, bukan selectDokter
+            }
+        })
+    }
+
+    //Fungsi untuk mengirikan seluruh data ke screen lain
+    const handleSelectDokter = async (id: string) => {
         try {
-            const token = await AsyncStorage.getItem("token");
-            if (!token) {
-                Alert.alert("Error", "Token tidak di temukan silahkan Login dulu");
-                return;
-            }
-            const payload = {
-                kode_booking: "BOOK123456",
-                limit_waktu: "14:30:00",
-                status: "sudah",
-                tanggal: "2025-09-22",
-                kode: 1,
-                id_list_poli: "04334b82-971f-3abe-accf-22ac532a95a7",
-                id_dokter: "DK064",
-                id_antrian: "AT34",
-            };
 
-            const res = await api.post("/pembayaran/store", payload, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                },
-            });
-
-            if (res.data.success === true) {
-                setOpen(true);
-            } else {
-                Alert.alert("Gagal", res.data.message || "Terjadi kesalahan");
-            }
+            const dokter = await getDokterById(id);
+            setSelectDokter(dokter)
+            console.log("Data yang kamu Pick ============", selectDokter)
         } catch (err: any) {
-            console.log("Error", err.response?.data || err.message);
-            Alert.alert("Error", err.message);
+            console.log("Yah mau gimana lagi ya: ", err.response?.data);
         }
-    };
+    }
 
+
+    // Menampikan semua data yang ada di dalam server
     useEffect(() => {
         handlerShow();
     }, []);
 
-    if (loading) {
+    if (loading || dokterData.length === 0) {
         return (
             <View className="flex-1 justify-center items-center">
                 <ActivityIndicator size="large" color="#0000ff" />
@@ -179,7 +184,7 @@ export default function PilihDokterScreen() {
                         onPress={() => router.back()}
                     />
                     <Text className="ml-2 text-lg font-extrabold text-[#0D4D8F]">
-                        {`Silahkan Pilih Dokter ${poli ? `Poli ${poli}` : "Poli"
+                        {`Silahkan Pilih Dokter ${poli ? `Poli ${DataPoli.nama}` : "Poli"
                             }`}
                     </Text>
                 </View>
@@ -195,12 +200,13 @@ export default function PilihDokterScreen() {
                 source={require("../../../assets/images/bgprofilee.png")}
                 resizeMode="contain"
                 imageStyle={{ opacity: 0.0 }}
-                className="flex-1 mt-6"
-            >
+                className="flex-1 mt-6" >
                 <FlatList
                     data={dokterData}
                     contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
                     keyExtractor={(item) => item.key}
+
+                    // Menampilkan informasi data jika data di server kosong
                     ListEmptyComponent={() => (
                         <View className="flex-1 justify-center items-center py-20">
                             <Text className="text-gray-500 text-center">
@@ -208,6 +214,8 @@ export default function PilihDokterScreen() {
                             </Text>
                         </View>
                     )}
+
+                    // Menampilkan data jikda di server menggirimkan datanya
                     renderItem={({ item }) => (
                         <DoctorCard
                             name={item.name}
@@ -215,7 +223,7 @@ export default function PilihDokterScreen() {
                             day={item.day}
                             time_start={item.time_start}
                             time_end={item.time_end}
-                            onPress={handlerStore}
+                            onPress={() => handleSelectDokterId(item)}
                         />
                     )}
                 />
