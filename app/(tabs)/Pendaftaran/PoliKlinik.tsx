@@ -10,6 +10,7 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import { Ionicons } from '@expo/vector-icons';
 import PoliItemCard from '@/src/components/PoliItemCard';
 import { getPoliById, getPoliList } from '@/src/services/poliService';
+import Loading from '@/src/components/Loading';
 
 function PoliKlinik() {
   const navigation = useNavigation();
@@ -109,6 +110,14 @@ function PoliKlinik() {
     getPoli();
   }, []);
 
+
+  if (loading || poliList.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <Loading />
+      </View>
+    );
+  }
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
@@ -127,29 +136,21 @@ function PoliKlinik() {
       </View>
 
       {/* Body pakai FlatList + watermark */}
-      <ImageBackground
-        source={require("../../../assets/images/bgprofilee.png")}
-        resizeMode="contain"
-        imageStyle={{ opacity: 0.06 }}
-        className="flex-1"
-      >
-        {loading ? (
-          <ActivityIndicator size="large" color="#0D4D8F" className="mt-10" />
-        ) : (
-          // Untuk menampilkan data dari json 
-          <FlatList
-            data={poliList}
-            keyExtractor={(item) => item.id_list_poli.toString()}
-            contentContainerStyle={{ paddingBottom: 24, paddingTop: 6, paddingHorizontal: 16 }}
-            renderItem={({ item }) => (
-              <PoliItemCard
-                title={item.nama}
-                onPress={() => handleSelectPoli(item)}// menggunakan fungsi handkeSelectPoli yang di select
-              />
-            )}
-          />
-        )}
-      </ImageBackground>
+      <View className='ml-5 mr-5'>
+        {/* Untuk menampilkan data dari json */}
+        <FlatList
+          data={poliList}
+          keyExtractor={(item) => item.id_list_poli.toString()}
+          contentContainerStyle={{ paddingBottom: 24, paddingTop: 6, paddingHorizontal: 16 }}
+          renderItem={({ item }) => (
+            
+            <PoliItemCard
+              title={item.nama}
+              onPress={() => handleSelectPoli(item)}
+            />
+          )}
+        />
+      </View>
 
       {/* Modal Kalender */}
       <Modal

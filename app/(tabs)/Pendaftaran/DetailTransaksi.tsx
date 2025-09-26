@@ -1,16 +1,58 @@
 import api from '@/src/api/api';
+import BackNavbar from '@/src/components/BackNavbar';
+import Loading from '@/src/components/Loading';
+import TopBar from '@/src/components/TopBar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useLocalSearchParams } from 'expo-router'
-import React from 'react'
-import { View, Text, Alert } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router'
+import React, { useState } from 'react'
+import { View, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import Button from '@/src/components/Button';
+import SuccessModal from '@/src/components/SuccessModal';
 
 
 
 function DetailTransaksiScreen() {
+  // Ambil data yang sudah di kirimkan dari local mobile
   const { dokter } = useLocalSearchParams();
-  const DataDokter = dokter ? JSON.parse(dokter as string) : null;
+  const { poli, tanggal, pasien } = useLocalSearchParams();
 
-  console.log("======Dokter=====", DataDokter)
+  // Convent ke dalam bentuk JSON
+  const DataDokter = dokter ? JSON.parse(dokter as string) : null;
+  const DataPoli = poli ? JSON.parse(poli as string) : null;
+  const DataPasien = pasien ? JSON.parse(pasien as string) : null;
+
+  const [open, setOpen] = useState(false);
+
+  //Fungsi untuk deadline
+  const deadlineCheckin = (nowDate: string): string => {
+    const date = new Date(nowDate);
+
+    // Tambahkan 3 hari
+    date.setDate(date.getDate() + 3);
+
+    // Format hasil ke YYYY-MM-DD
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    const result = `${year}-${month}-${day}`;
+    console.log("======Limit=====", result);
+
+    return result;
+  }
+
+  const today = new Date().toISOString().split("T")[0];
+  const limit_waktu = deadlineCheckin(today);
+
+  console.log("=====dokter======", DataDokter.id_dokter)
+  console.log("=====Poli======", DataPoli.id_list_poli)
+  console.log("=====Pasien======", DataPasien.kode)
+  console.log("=====Tanggal======", tanggal)
+  console.log("=====Limit Waktu======", limit_waktu)
+
 
   const handlerStore = async () => {
     try {
@@ -20,15 +62,16 @@ function DetailTransaksiScreen() {
         return;
       }
       const payload = {
-        kode_booking: "BOOK123456",
-        limit_waktu: "14:30:00",
+        limit_waktu: limit_waktu,
         status: "belum",
-        tanggal: "2025-09-22",
-        kode: 1,
-        id_list_poli: "04334b82-971f-3abe-accf-22ac532a95a7",
-        id_dokter: "DK064",
+        tanggal: tanggal,
+        kode: DataPasien.kode,
+        id_list_poli: DataPoli.id_list_poli,
+        id_dokter: DataDokter.id_dokter,
         id_antrian: "AT34",
       };
+
+      console.log("====payLoad====", payload)
 
       const res = await api.post("/pembayaran/store", payload, {
         headers: {
@@ -47,7 +90,6 @@ function DetailTransaksiScreen() {
     }
   };
 
-  console.log(DataDokter)
 
   // Komponen baris info rapi
   function InfoRow({ label, value }: { label: string; value?: string }) {
@@ -71,10 +113,102 @@ function DetailTransaksiScreen() {
 
 
   return (
-    <View>
-      <InfoRow label="Nomor RM" value={DataDokter.nama} />
-    </View>
-  )
+    <SafeAreaView className="flex-1 bg-[#2563eb]">
+      <TopBar label="Detail Booking" />
+      <View className="flex-1 bg-gray-50 mt-32 py-14">
+        <View className="items-center -mt-36">
+          <Image
+            source={require('../../../assets/images/RumahSakit/rsbt.png')}
+            resizeMode='contain'
+            className='border-2 rounded-md border-blue-500'
+          />
+        </View>
+        <View className=' ml-10 mr-10 mt-5 items-center '>
+          <Text className='text-lg font-semibold text-gray-800'>📍Rumah sakit Bakti Timah Pangkal Pinang</Text>
+          <Text className='font-normal text-center text-gray-500'>Jl. Bukit Baru No.1, Kel.Taman Bunga Kec.Gerunggang Kota Pangkal Pinang Prov.Kep.Bangka Belitung</Text>
+        </View>
+
+        <View className='flex-row ml-5 mr-5 bg-slate-200 mt-10 px-5 py-5 rounded-lg'>
+          <View className='flex-row'>
+            <Image
+              source={require('../../../assets/images/RumahSakit/vector_dokter.png')}
+              className='w-16 h-16 border  border-[##2563eb] rounded-full'
+            />
+            <View className='ml-5 '>
+              <TouchableOpacity onPress={() => router.push('/Auth/User')} >
+                <Text className='font-normal text-sm mr-1 text-gray-900'>Dokter </Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>Dr. Yanto Sitorus </Text>
+                <View className='flex-row'>
+                  <Text className='text-base text-[#2563eb] '>Lihat informasi dokter</Text>
+                  <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View className='flex-row ml-5 mr-5 bg-slate-200 mt-1 px-5 py-5 rounded-lg'>
+          <View className='flex-row'>
+            <Image
+              source={require('../../../assets/icons/ic_poli.png')}
+              resizeMode='contain'
+              className='w-16 h-16 border  border-[#2563eb] rounded-full'
+            />
+            <View className='ml-5 '>
+              <TouchableOpacity onPress={() => router.push('/Auth/User')} >
+                <Text className='font-normal text-sm mr-1 text-gray-900'>Jenis Poli </Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>Dengkul</Text>
+                <View className='flex-row'>
+                  <Text className='text-base text-blue-500'>Lihat informasi dokter</Text>
+                  <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+        <View className='flex-row ml-5 mr-5 bg-slate-200 mt-1 px-5 py-5 rounded-lg'>
+          <View className='flex-row'>
+            <Image
+              source={require('../../../assets/images/event/kalender.png')}
+              resizeMode='contain'
+              className='w-16 h-16 border  border-[#2563eb] rounded-full'
+            />
+            <View className='ml-5 mt-2'>
+              <TouchableOpacity onPress={() => router.push('/Auth/User')} >
+                <Text className='font-semibold mr-1'>Tanggal </Text>
+                <View className='flex-row'>
+                  <Text className='text-base text-[#2563eb]'>25 Desember 2025</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+
+
+
+        <View className='ml-5 mr-5'>
+          <Button label="Buat Janji Temu"
+            onPress={() => setOpen(true)} />
+        </View>
+
+
+      </View>
+
+      {/* Modal Berhasil */}
+      <SuccessModal
+        visible={open}
+        onClose={() => {
+          setOpen(false);
+          router.push("/Pendaftaran/DetailTransaksi");
+        }}
+        message="Data berhasil disimpan!"
+      />
+    </SafeAreaView>
+
+
+  );
+
 }
 
 export default DetailTransaksiScreen

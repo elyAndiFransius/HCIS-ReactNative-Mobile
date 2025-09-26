@@ -4,12 +4,10 @@ import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 
-
-
 export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.replace("/Auth/LoginScreen"); 
+      router.replace("/Auth/LoginScreen");
     }, 2000);
 
     return () => clearTimeout(timer);

@@ -1,21 +1,23 @@
-import React, { useEffect, useState, useMemo } from "react";
-import {
-    View,
-    Text,
-    ActivityIndicator,
-    FlatList,
-    Alert,
-    ImageBackground,
-    SafeAreaView,
-    TouchableOpacity,
-} from "react-native";
 import api, { STORAGE_URL } from "@/src/api/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
 import DoctorCard from "@/src/components/DoctorCard";
+import Loading from "@/src/components/Loading";
 import SuccessModal from "@/src/components/SuccessModal";
 import { getDokterById } from "@/src/services/dokterService";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, useLocalSearchParams } from "expo-router";
+import LottieView from "lottie-react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+    ActivityIndicator,
+    Alert,
+    FlatList,
+    ImageBackground,
+    SafeAreaView,
+    Text,
+    View
+} from "react-native";
+
 
 export default function PilihDokterScreen() {
     const [loading, setLoading] = useState(true);
@@ -141,7 +143,10 @@ export default function PilihDokterScreen() {
         router.push({
             pathname: "/Pendaftaran/DetailTransaksi",
             params: {
-                dokter: JSON.stringify(item) // Gunakan item, bukan selectDokter
+                dokter: JSON.stringify(item), // Gunakan item, bukan selectDokter
+                poli: JSON.stringify(DataPoli),
+                pasien: JSON.stringify(DataPasien),
+                tanggal: formatData
             }
         })
     }
@@ -167,7 +172,7 @@ export default function PilihDokterScreen() {
     if (loading || dokterData.length === 0) {
         return (
             <View className="flex-1 justify-center items-center">
-                <ActivityIndicator size="large" color="#0000ff" />
+                <Loading />
             </View>
         );
     }
@@ -206,7 +211,6 @@ export default function PilihDokterScreen() {
                     contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
                     keyExtractor={(item) => item.key}
 
-                    // Menampilkan informasi data jika data di server kosong
                     ListEmptyComponent={() => (
                         <View className="flex-1 justify-center items-center py-20">
                             <Text className="text-gray-500 text-center">
