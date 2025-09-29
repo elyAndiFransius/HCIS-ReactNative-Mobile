@@ -58,7 +58,7 @@ export default function PilihDokterScreen() {
         id_dokter: string;
         nama: string;
         foto: string;
-        jadwal_dokter?: Jadwal[];
+        jadwal_dokter: Jadwal[];
     }
 
     // Format tanggal untuk menampilkan nama bulan
@@ -80,8 +80,9 @@ export default function PilihDokterScreen() {
                 Alert.alert("Error", "Token tidak ditemukan, silahkan login dulu");
                 return;
             }
-            setLoading(true);
+
             setDokterData([]); // kita reset data sebelum di fetch
+            setLoading(true);
 
             const res = await api.get("/dokter/index", {
                 headers: {
@@ -89,6 +90,7 @@ export default function PilihDokterScreen() {
                     Accept: "application/json",
                 },
             });
+
             const rawData = res.data?.data || res.data || [];
 
             // Memastikan data yang dikirimkan server dalam berntuk array
@@ -129,6 +131,7 @@ export default function PilihDokterScreen() {
             setDokterData(flattened); // Menyimapan data
         } catch (err: any) {
             console.log("API Error:", err.response?.data || err.message);
+            setDokterData([]);
             console.log("Ini data yang masuk ke error:", setDokterData)
             Alert.alert("Error", "Gagal memuat data dokter");
         } finally {
@@ -238,7 +241,8 @@ export default function PilihDokterScreen() {
                 visible={open}
                 onClose={() => {
                     setOpen(false);
-                    router.push("/(tabs)/Beranda");
+                    router.push("/Pendaftaran/NoAntrian");
+                    
                 }}
                 message="Data berhasil disimpan!"
             />

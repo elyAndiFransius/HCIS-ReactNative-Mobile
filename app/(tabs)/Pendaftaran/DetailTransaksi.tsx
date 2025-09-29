@@ -39,19 +39,12 @@ function DetailTransaksiScreen() {
     const day = String(date.getDate()).padStart(2, "0");
 
     const result = `${year}-${month}-${day}`;
-    console.log("======Limit=====", result);
 
     return result;
   }
 
   const today = new Date().toISOString().split("T")[0];
   const limit_waktu = deadlineCheckin(today);
-
-  console.log("=====dokter======", DataDokter.id_dokter)
-  console.log("=====Poli======", DataPoli.id_list_poli)
-  console.log("=====Pasien======", DataPasien.kode)
-  console.log("=====Tanggal======", tanggal)
-  console.log("=====Limit Waktu======", limit_waktu)
 
 
   const handlerStore = async () => {
@@ -68,12 +61,11 @@ function DetailTransaksiScreen() {
         kode: DataPasien.kode,
         id_list_poli: DataPoli.id_list_poli,
         id_dokter: DataDokter.id_dokter,
-        id_antrian: "AT34",
       };
 
-      console.log("====payLoad====", payload)
 
-      const res = await api.post("/pembayaran/store", payload, {
+
+      const res = await api.post("/booking/store", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
@@ -81,6 +73,15 @@ function DetailTransaksiScreen() {
       });
 
       if (res.data.success === true) {
+        const DataBooking = res.data.data;
+        setOpen(true)
+        router.push({
+          pathname: "/Pendaftaran/NoAntrian",
+          params: {
+            booking: JSON.stringify(DataBooking)
+          }
+        })
+
       } else {
         Alert.alert("Gagal", res.data.message || "Terjadi kesalahan");
       }
@@ -189,7 +190,7 @@ function DetailTransaksiScreen() {
 
         <View className='ml-5 mr-5'>
           <Button label="Buat Janji Temu"
-            onPress={() => setOpen(true)} />
+            onPress={() => handlerStore()} />
         </View>
 
 
@@ -200,7 +201,6 @@ function DetailTransaksiScreen() {
         visible={open}
         onClose={() => {
           setOpen(false);
-          router.push("/Pendaftaran/DetailTransaksi");
         }}
         message="Data berhasil disimpan!"
       />

@@ -8,7 +8,7 @@ import {
     Text,
     TouchableOpacity,
     View,
-} from "react-native"; 
+} from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
 
@@ -25,6 +25,16 @@ function Row({ left, right }: { left: string; right: string }) {
 }
 
 export default function NomorAntrianScreen() {
+
+    const { booking } = useLocalSearchParams<{
+        booking?: string;
+    }>();
+
+    const DataBooking = booking ? JSON.parse(booking as string) : null;
+
+    console.log("==============DataBooking dari NoAntrian=========", DataBooking)
+
+    // =========================Variable Gopal==================
     // opsional terima param dari halaman sebelumnya
     const params = useLocalSearchParams<{
         poli?: string;
@@ -81,57 +91,9 @@ export default function NomorAntrianScreen() {
                 >
                     {/* Kartu utama */}
                     <View
-                        className="bg-white rounded-2xl px-4 py-5"
-                        style={{
-                            shadowColor: "#000",
-                            shadowOpacity: 0.08,
-                            shadowRadius: 10,
-                            shadowOffset: { width: 0, height: 6 },
-                            elevation: 4,
-                        }}
-                    >
-                        {/* Header kecil kartu */}
-                        <Text className="text-center font-extrabold text-[#0D4D8F]">
-                            {hospitalName}
-                        </Text>
-                        <Text className="text-center text-[12px] text-gray-700 mt-1">
-                            No. RM: {nomorRM}
-                        </Text>
-                        <Text className="text-center text-[12px] text-gray-700">
-                            {dokter}
-                        </Text>
-
-                        {/* Nomor Antrian */}
-                        <Text className="text-center mt-4 font-extrabold text-gray-900">
-                            Nomor Antrian Anda
-                        </Text>
-                        <View className="items-center mt-2 mb-1">
-                            <View className="w-28 h-28 rounded-full border-4 border-[#0D4D8F] items-center justify-center">
-                                <Text className="text-4xl font-extrabold text-[#0D4D8F]">{queueNo}</Text>
-                            </View>
-                        </View>
-
-                        {/* Dua kolom info kecil */}
-                        <View className="flex-row justify-between mt-2 mb-1 px-1">
-                            <View className="items-center">
-                                <Ionicons name="people-outline" size={18} color="#0D4D8F" />
-                                <Text className="text-[11px] text-gray-600 mt-1">Sisa{"\n"}Antrian</Text>
-                                <Text className="text-base font-bold text-[#0D4D8F] mt-1">{sisaAntrian}</Text>
-                            </View>
-                            <View className="items-center">
-                                <Ionicons name="person-circle-outline" size={18} color="#0D4D8F" />
-                                <Text className="text-[11px] text-gray-600 mt-1">Peserta{"\n"}Dilayani</Text>
-                                <Text className="text-base font-bold text-[#0D4D8F] mt-1">{pesertaDilayani}</Text>
-                            </View>
-                        </View>
-
+                        className="bg-white rounded-2xl px-4 py-5">
                         {/* Garis tipis */}
                         <View className="h-[1px] bg-gray-200 my-3" />
-
-                        {/* Detail ringkas */}
-                        <Row left="Poli" right={poli} />
-                        <Row left="Tanggal Kunjungan" right={visitDate} />
-                        <Row left="Kode Booking" right={kodeBooking} />
 
                         {/* Estimasi */}
                         <View className="mt-4 mb-2 items-center">
@@ -157,17 +119,9 @@ export default function NomorAntrianScreen() {
 
                         {/* QR Card */}
                         <View
-                            className="bg-white rounded-2xl mt-3 px-4 py-6 self-center"
-                            style={{
-                                shadowColor: "#000",
-                                shadowOpacity: 0.1,
-                                shadowRadius: 12,
-                                shadowOffset: { width: 0, height: 6 },
-                                elevation: 5,
-                            }}
-                        >
+                            className="bg-white rounded-2xl mt-3 px-4 py-6 self-center">
                             {/* QR code menggunakan kode booking */}
-                            <QRCode value={kodeBooking} size={200} color="#0D4D8F" />
+                            <QRCode value={DataBooking.kode_booking} size={200} color="#0D4D8F" />
                         </View>
                     </View>
 
@@ -183,36 +137,6 @@ export default function NomorAntrianScreen() {
                             <Text className="text-[#1F5EA8] underline text-[12px] font-semibold">
                                 Lihat Informasi dan Prosedur Lengkap
                             </Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Tombol aksi */}
-                    <View className="mt-5">
-                        <TouchableOpacity
-                            activeOpacity={0.9}
-                            className="flex-row items-center justify-center bg-[#1F5EA8] rounded-2xl py-3 mb-3"
-                            onPress={() => {
-                                // TODO: handle check-in
-                            }}
-                            style={{
-                                shadowColor: "#000",
-                                shadowOpacity: 0.08,
-                                shadowRadius: 8,
-                                shadowOffset: { width: 0, height: 4 },
-                                elevation: 3,
-                            }}
-                        >
-                            <Ionicons name="checkmark-circle" size={20} color="#C7E1FF" />
-                            <Text className="ml-2 text-white font-extrabold">Check-in</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                            activeOpacity={0.9}
-                            className="flex-row items-center justify-center bg-white rounded-2xl py-3 border-2 border-[#1F5EA8]"
-                            onPress={() => router.back()}
-                        >
-                            <Ionicons name="close-circle" size={20} color="#D32F2F" />
-                            <Text className="ml-2 text-[#1F5EA8] font-extrabold">Batalkan</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
