@@ -96,10 +96,11 @@ export default function PilihDokterScreen() {
             // Memastikan data yang dikirimkan server dalam berntuk array
             const dokterList: Dokter[] = Array.isArray(rawData) ? rawData : [];
 
-
             //  Flatten dokter + jadwal jadi list
             const flattened = dokterList.flatMap((dokter) => {
-                const jadwalAktif = dokter.jadwal_dokter?.filter((j) => j.status === "aktif") || []; // Filter data dokter yang aktif
+                const jadwalAktif = Array.isArray(dokter.jadwal_dokter)
+                    ? dokter.jadwal_dokter.filter((j) => j.status === "aktif")
+                    : [];
                 if (jadwalAktif.length > 0) {
                     return jadwalAktif.map((jadwal) => ({
                         key: `${dokter.id_dokter}-${jadwal.id_jadwal}`,
@@ -166,17 +167,31 @@ export default function PilihDokterScreen() {
         }
     }
 
-
     // Menampikan semua data yang ada di dalam server
     useEffect(() => {
         handlerShow();
     }, []);
+
+    if (loading) {
+        return (
+            <View className="flex-1 justify-center items-center">
+                <Loading />
+            </View>
+        );
+    }
 
     if (loading || dokterData.length === 0) {
         return (
             <View className="flex-1 justify-center items-center">
                 <Loading />
             </View>
+        );
+    }
+    if (!loading && dokterData.length === 0) {
+        return (
+            <SafeAreaView className="flex-1 justify-center items-center bg-white">
+                <Text className="text-gray-500">Tidak ada dokter tersedia</Text>
+            </SafeAreaView>
         );
     }
 
@@ -242,7 +257,7 @@ export default function PilihDokterScreen() {
                 onClose={() => {
                     setOpen(false);
                     router.push("/Pendaftaran/NoAntrian");
-                    
+
                 }}
                 message="Data berhasil disimpan!"
             />

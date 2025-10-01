@@ -24,6 +24,8 @@ function DetailTransaksiScreen() {
   const DataPoli = poli ? JSON.parse(poli as string) : null;
   const DataPasien = pasien ? JSON.parse(pasien as string) : null;
 
+  console.log("=======",DataDokter.name)
+
   const [open, setOpen] = useState(false);
 
   //Fungsi untuk deadline
@@ -138,9 +140,9 @@ function DetailTransaksiScreen() {
             <View className='ml-5 '>
               <TouchableOpacity onPress={() => router.push('/Auth/User')} >
                 <Text className='font-normal text-sm mr-1 text-gray-900'>Dokter </Text>
-                <Text className='font-semibold text-base text-gray-900 mr-1'>Dr. Yanto Sitorus </Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>{DataDokter.nama}</Text>
                 <View className='flex-row'>
-                  <Text className='text-base text-[#2563eb] '>Lihat informasi dokter</Text>
+                  <Text className='text-base text-[#2563eb]'>Lihat informasi dokter</Text>
                   <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
                 </View>
               </TouchableOpacity>
@@ -158,7 +160,7 @@ function DetailTransaksiScreen() {
             <View className='ml-5 '>
               <TouchableOpacity onPress={() => router.push('/Auth/User')} >
                 <Text className='font-normal text-sm mr-1 text-gray-900'>Jenis Poli </Text>
-                <Text className='font-semibold text-base text-gray-900 mr-1'>Dengkul</Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>{DataPoli.name}</Text>
                 <View className='flex-row'>
                   <Text className='text-base text-blue-500'>Lihat informasi dokter</Text>
                   <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
@@ -179,7 +181,7 @@ function DetailTransaksiScreen() {
               <TouchableOpacity onPress={() => router.push('/Auth/User')} >
                 <Text className='font-semibold mr-1'>Tanggal </Text>
                 <View className='flex-row'>
-                  <Text className='text-base text-[#2563eb]'>25 Desember 2025</Text>
+                  <Text className='text-base text-[#2563eb]'>{tanggal}</Text>
                 </View>
               </TouchableOpacity>
             </View>
