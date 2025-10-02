@@ -2,8 +2,9 @@ import api from '@/src/api/api';
 import BackNavbar from '@/src/components/BackNavbar'
 import React, { useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { ActivityIndicator, Alert, FlatList, SafeAreaView, Text, TouchableOpacity, View, Modal } from 'react-native'
+import { ActivityIndicator, Alert, FlatList, Text, TouchableOpacity, View, Modal } from 'react-native'
 import { router, useNavigation } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DateTimePicker from '@react-native-community/datetimepicker'
 
 function TujuanPoliScreen() {

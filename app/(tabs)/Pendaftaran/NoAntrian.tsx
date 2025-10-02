@@ -3,12 +3,12 @@ import { router, useLocalSearchParams } from "expo-router";
 import React, { useMemo } from "react";
 import {
     ImageBackground,
-    SafeAreaView,
     ScrollView,
     Text,
     TouchableOpacity,
     View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import QRCode from "react-native-qrcode-svg";
 
 

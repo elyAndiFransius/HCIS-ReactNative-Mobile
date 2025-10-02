@@ -79,7 +79,9 @@ function DokterScreen() {
   return (
     <View>
       <BackNavbar />
+
       <SafeAreaView>
+
         <View className='mt-10'>
           <Text style={{ fontSize: 14, color: '#374151' }}>
             Nama Dokter <Text style={{ color: 'red' }}>*</Text>
@@ -87,8 +89,7 @@ function DokterScreen() {
           <InputField
             value={nama}
             onChangeText={setNama}
-            placeholder='Nama Dokter'
-          />
+            placeholder='Nama Dokter' />
 
           <Text style={{ fontSize: 14, color: '#374151' }}>
             Spesialis <Text style={{ color: 'red' }}>*</Text>
@@ -96,8 +97,7 @@ function DokterScreen() {
           <InputField
             value={spesialis}
             onChangeText={setSpesialis}
-            placeholder='Spesialis'
-          />
+            placeholder='Spesialis' />
 
           <Text style={{ fontSize: 14, color: '#374151' }}>
             Ruangan <Text style={{ color: 'red' }}>*</Text>
@@ -105,8 +105,7 @@ function DokterScreen() {
           <InputField
             value={ruangan}
             onChangeText={setRuangan}
-            placeholder='Ruangan'
-          />
+            placeholder='Ruangan' />
 
           <Text style={{ fontSize: 14, color: '#374151' }}>
             Alamat <Text style={{ color: 'red' }}>*</Text>
@@ -114,8 +113,7 @@ function DokterScreen() {
           <InputField
             value={alamat}
             onChangeText={setAlamat}
-            placeholder='Alamat'
-          />
+            placeholder='Alamat' />
 
           <Text style={{ fontSize: 14, color: '#374151' }}>
             No HP <Text style={{ color: 'red' }}>*</Text>
@@ -123,8 +121,7 @@ function DokterScreen() {
           <InputField
             value={no_hp}
             onChangeText={setNo_Hp}
-            placeholder='Nomor HP'
-          />
+            placeholder='Nomor HP' />
 
           <Text style={{ fontSize: 14, color: '#374151' }}>
             Poli <Text style={{ color: 'red' }}>*</Text>
@@ -133,15 +130,13 @@ function DokterScreen() {
             onValueChange={(value) => setPoli(value)}
             items={poliOptions}
             placeholder={{ label: "Pilih Poli", value: null }}
-            value={poli_id}
-          />
+            value={poli_id} />
 
           <View className='mt-7'>
             <Button
               label='Daftar'
               className='flex-row justify-center border border-gray-950 bg-blue-800 mt-14 rounded-lg py-4 w-1/4'
-              onPress={handlerSumbit}
-            />
+              onPress={handlerSumbit} />
           </View>
         </View>
       </SafeAreaView>

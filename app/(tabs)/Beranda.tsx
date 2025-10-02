@@ -3,7 +3,8 @@ import CardEvent from '@/src/components/CardEvent'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
 import React, { useContext } from 'react'
-import { SafeAreaView, View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { SafeAreaView } from "react-native-safe-area-context";
+import {  View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 
 // jenis layanan masih static
 const layanan = [

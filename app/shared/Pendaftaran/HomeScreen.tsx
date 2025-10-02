@@ -7,9 +7,10 @@ import TextJudul from '@/src/components/TextJudul'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router } from 'expo-router'
 import React, { useState, useContext } from 'react'
-import { Alert, Image, ImageBackground, SafeAreaView, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, ImageBackground, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { AuthContext } from "@/src/api/AuthProvider";
 import { Ionicons } from '@expo/vector-icons'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function PrimaryButton({ title, onPress }: { title: string; onPress: () => void }) {
     return (

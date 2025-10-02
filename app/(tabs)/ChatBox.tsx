@@ -33,7 +33,7 @@ const Header = () => {
       </TouchableOpacity>
       <Text className='text-lg font-semibold text-gray-700'>Chatbot AI</Text>
       <TouchableOpacity>
-        <AntDesign name='message1' size={20} color="#374151" />
+        <AntDesign name='message' size={20} color="#374151" />
       </TouchableOpacity>
     </View>
   )

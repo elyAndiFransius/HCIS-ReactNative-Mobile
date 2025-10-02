@@ -2,12 +2,13 @@ import api from '@/src/api/api';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  ActivityIndicator, Alert, FlatList, SafeAreaView, Text, TouchableOpacity, Platform,
+  ActivityIndicator, Alert, FlatList,  Text, TouchableOpacity, Platform,
   View, Modal, ImageBackground
 } from 'react-native';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from "react-native-safe-area-context";
 import PoliItemCard from '@/src/components/PoliItemCard';
 import { getPoliById, getPoliList } from '@/src/services/poliService';
 import Loading from '@/src/components/Loading';

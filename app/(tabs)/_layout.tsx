@@ -4,6 +4,7 @@ import { Image, View } from "react-native";
 import "../../styles/global.css";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StackActions } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabsLayout() {
     const insets = useSafeAreaInsets();

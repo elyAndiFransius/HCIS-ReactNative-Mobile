@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, Image, ScrollView, Switch, ImageBackground, TouchableOpacity } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {  useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import SwitchButton from "@/src/components/Switch";
 import { router } from 'expo-router'
 import { AuthContext, AuthProvider } from '@/src/api/AuthProvider';

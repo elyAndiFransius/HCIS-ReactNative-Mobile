@@ -8,12 +8,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import LottieView from "lottie-react-native";
 import React, { useEffect, useMemo, useState } from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
     ActivityIndicator,
     Alert,
     FlatList,
     ImageBackground,
-    SafeAreaView,
     Text,
     View
 } from "react-native";

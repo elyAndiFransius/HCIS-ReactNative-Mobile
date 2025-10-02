@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, Alert } from 'react-native'
 import BackNavbar from '@/src/components/BackNavbar'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import InputField from '@/src/components/InputField'
 import Button from '@/src/components/Button'
 import AsyncStorage from '@react-native-async-storage/async-storage'

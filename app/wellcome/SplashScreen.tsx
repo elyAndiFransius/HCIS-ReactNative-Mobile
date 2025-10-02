@@ -18,8 +18,7 @@ export default function SplashScreen() {
       <Image
         source={require("../../assets/images/splash-icon.png")}
         className="w-80 h-80"
-        resizeMode="contain"
-      />
+        resizeMode="contain" />
     </SafeAreaView>
   );
 }
