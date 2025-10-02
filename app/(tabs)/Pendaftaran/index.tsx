@@ -20,20 +20,32 @@ export default function index() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header sederhana */}
-      <View className="flex-row items-center justify-between px-4 py-3 mt-10 bg-white">
-        <View className="flex-row items-center">
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color="#0D4D8F"
-            onPress={() => router.back()}
-          />
-          <Text className="ml-2 text-lg font-extrabold text-gray-900">
-            Pendaftaran Online
-          </Text>
-        </View>
-        <Ionicons name="information-circle-outline" size={20} color="#0D4D8F" />
-      </View>
+     {/* Header biru */}
+<View
+  className="flex-row items-center justify-between px-4 pb-3"
+  style={{
+    backgroundColor: "#0D4D8F",
+    paddingTop: 40, // biar agak turun dari status bar
+  }}
+>
+  <View className="flex-row items-center">
+    <Ionicons
+      name="chevron-back"
+      size={24}
+      color="#fff"             // ubah jadi putih
+      onPress={() => router.back()}
+    />
+    <Text className="ml-2 text-lg font-extrabold text-white">
+      Pendaftaran Online
+    </Text>
+  </View>
+  <Ionicons
+    name="information-circle-outline"
+    size={20}
+    color="#fff"               // ubah jadi putih
+  />
+</View>
+
 
       <ScrollView
         contentContainerStyle={{ padding: 16, paddingBottom: 40 }}

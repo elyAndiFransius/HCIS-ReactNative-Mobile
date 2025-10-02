@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -16,7 +17,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-
 const POLI = [
   {
     id: 1,
@@ -151,6 +151,7 @@ export default function PilihPoliScreen() {
   const [showRNPicker, setShowRNPicker] = useState(false); // dialog native Android
   const [date, setDate] = useState(new Date());
   const [selectedPoli, setSelectedPoli] = useState<string | null>(null);
+  const tabBarHeight = useBottomTabBarHeight();
 
   const fmt = (d: Date) => {
     const bulan = [
@@ -202,19 +203,25 @@ export default function PilihPoliScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
-      <View className="px-5 pt-10 pb-3 bg-white">
-        <View className="flex-row items-center">
-          <Ionicons
-            name="chevron-back"
-            size={24}
-            color="#0D4D8F"
-            onPress={() => router.push("/(tabs)/Pendaftaran/data_pasien")}
-          />
-          <Text className="ml-2 text-lg font-extrabold text-[#0D4D8F]">
-            Pilih Tujuan Poli Anda
-          </Text>
-        </View>
-      </View>
+            <View
+              className="px-5 pb-3"
+              style={{
+                backgroundColor: "#0D4D8F",
+                paddingTop: 40, // atur jarak supaya header turun
+              }}
+            >
+              <View className="flex-row items-center">
+                <Ionicons
+                  name="chevron-back"
+                  size={24}
+                  color="#fff" // ubah jadi putih
+                  onPress={() => router.push("/(tabs)/Pendaftaran/data_pasien")}
+                />
+                <Text className="ml-2 text-lg font-extrabold text-white">
+                  Pilih tujuan poli anda
+                </Text>
+              </View>
+            </View>
 
       {/* Body + watermark */}
       <ImageBackground
@@ -225,7 +232,10 @@ export default function PilihPoliScreen() {
       >
         <ScrollView
           className="flex-1 px-4"
-          contentContainerStyle={{ paddingBottom: 24, paddingTop: 6 }}
+          contentContainerStyle={{
+            paddingTop: 6,
+            paddingBottom: tabBarHeight + 16, // <- jarak aman di bawah
+          }}
         >
           {POLI.map((p) => (
             <PoliItemCard

@@ -83,12 +83,25 @@ export default function DataPasienScreen() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
-      <View className="px-5 pt-10 pb-3 bg-white">
-        <View className="flex-row items-center">
-          <Ionicons name="chevron-back" size={24} color="#000000ff" onPress={() => router.push("/(tabs)/Pendaftaran/pasien-umum")} />
-          <Text className="ml-2 text-lg font-extrabold text-[#000000ff]">Data Pasien</Text>
-        </View>
-      </View>
+          <View
+            className="px-5 pb-3"
+            style={{
+              backgroundColor: "#0D4D8F",
+              paddingTop: 40, // atur jarak supaya header turun
+            }}
+          >
+            <View className="flex-row items-center">
+              <Ionicons
+                name="chevron-back"
+                size={24}
+                color="#fff" // ubah jadi putih
+                onPress={() => router.push("/(tabs)/Pendaftaran/pasien-umum")}
+              />
+              <Text className="ml-2 text-lg font-extrabold text-white">
+                Data Pasien
+              </Text>
+            </View>
+          </View>
 
       {/* Background bergambar + konten di TENGAH */}
       <ImageBackground

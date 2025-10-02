@@ -1,6 +1,8 @@
 import InputField from "@/src/components/InputField";
 import { Ionicons } from "@expo/vector-icons";
-import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -14,7 +16,13 @@ import {
   View,
 } from "react-native";
 
-function PrimaryButton({ title, onPress }: { title: string; onPress: () => void }) {
+function PrimaryButton({
+  title,
+  onPress,
+}: {
+  title: string;
+  onPress: () => void;
+}) {
   return (
     <TouchableOpacity
       activeOpacity={0.9}
@@ -51,19 +59,35 @@ export default function PasienUmumScreen() {
   };
 
   const handleSearch = () => {
-    if (!mrnOrNik.trim()) return Alert.alert("Validasi", "Nomor Rekam Medis atau NIK wajib diisi.");
-    if (!birthDate) return Alert.alert("Validasi", "Tanggal lahir wajib diisi.");
-    Alert.alert("Cari Pasien", `NIK/RM: ${mrnOrNik}\nTanggal Lahir: ${fmt(birthDate)}`);
-    
+    if (!mrnOrNik.trim())
+      return Alert.alert("Validasi", "Nomor Rekam Medis atau NIK wajib diisi.");
+    if (!birthDate)
+      return Alert.alert("Validasi", "Tanggal lahir wajib diisi.");
+    Alert.alert(
+      "Cari Pasien",
+      `NIK/RM: ${mrnOrNik}\nTanggal Lahir: ${fmt(birthDate)}`
+    );
   };
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
-      <View className="px-5 pt-10 pb-3 bg-white">
+      {/* Header */}
+      <View
+        className="px-5 pb-3"
+        style={{
+          backgroundColor: "#0D4D8F",
+          paddingTop: 40, // atur jarak supaya header turun
+        }}
+      >
         <View className="flex-row items-center">
-          <Ionicons name="chevron-back" size={24} color="#000000ff" onPress={() => router.push("/(tabs)/Pendaftaran")}  />
-          <Text className="ml-2 text-lg font-extrabold text-[#000000ff]">
+          <Ionicons
+            name="chevron-back"
+            size={24}
+            color="#fff" // ubah jadi putih
+            onPress={() => router.push("/(tabs)/Pendaftaran")}
+          />
+          <Text className="ml-2 text-lg font-extrabold text-white">
             Pendaftaran Online Pasien
           </Text>
         </View>
@@ -75,7 +99,7 @@ export default function PasienUmumScreen() {
         resizeMode="cover"
         className="flex-1"
         style={{ width: 1200, height: 1200, alignSelf: "center" }}
-        imageStyle={{ opacity: 0.3 }} 
+        imageStyle={{ opacity: 0.3 }}
       >
         <ScrollView
           contentContainerStyle={{
@@ -83,7 +107,6 @@ export default function PasienUmumScreen() {
             justifyContent: "center",
             alignItems: "center",
             padding: 16,
-    
           }}
         >
           <View
@@ -105,10 +128,12 @@ export default function PasienUmumScreen() {
               value={mrnOrNik}
               onChangeText={setMrnOrNik}
               containerClassName="w-full mb-5"
-               editable={false}
+              editable={true}
             />
 
-            <Text className="text-[13px] font-semibold text-gray-800 mt-5 mb-1">Tanggal Lahir</Text>
+            <Text className="text-[13px] font-semibold text-gray-800 mt-5 mb-1">
+              Tanggal Lahir
+            </Text>
             <TouchableOpacity
               activeOpacity={0.85}
               onPress={() => setShowPicker(true)}
@@ -133,7 +158,10 @@ export default function PasienUmumScreen() {
             )}
 
             <View className="mt-8">
-              <PrimaryButton title="Cari Pasien" onPress={() => router.push("/(tabs)/Pendaftaran/data_pasien")} />
+              <PrimaryButton
+                title="Cari Pasien"
+                onPress={() => router.push("/(tabs)/Pendaftaran/data_pasien")}
+              />
             </View>
           </View>
         </ScrollView>
