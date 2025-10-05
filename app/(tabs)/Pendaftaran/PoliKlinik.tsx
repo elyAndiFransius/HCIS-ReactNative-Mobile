@@ -2,7 +2,7 @@ import api from '@/src/api/api';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  ActivityIndicator, Alert, FlatList,  Text, TouchableOpacity, Platform,
+  ActivityIndicator, Alert, FlatList, Text, TouchableOpacity, Platform,
   View, Modal, ImageBackground
 } from 'react-native';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
@@ -115,7 +115,8 @@ function PoliKlinik() {
   if (loading || poliList.length === 0) {
     return (
       <View className="flex-1 justify-center items-center">
-        <Loading />
+        <ActivityIndicator size="large" color="#1E3A8A" />
+        <Text className="mt-2 text-gray-600">Loading...</Text>
       </View>
     );
   }
@@ -144,7 +145,7 @@ function PoliKlinik() {
           keyExtractor={(item) => item.id_list_poli.toString()}
           contentContainerStyle={{ paddingBottom: 24, paddingTop: 6, paddingHorizontal: 16 }}
           renderItem={({ item }) => (
-            
+
             <PoliItemCard
               title={item.nama}
               onPress={() => handleSelectPoli(item)}

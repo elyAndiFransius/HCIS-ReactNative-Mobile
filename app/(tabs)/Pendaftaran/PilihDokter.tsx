@@ -89,6 +89,7 @@ export default function PilihDokterScreen() {
                     Authorization: `Bearer ${token}`,
                     Accept: "application/json",
                 },
+                timeout: 5000,
             });
 
             const rawData = res.data?.data || res.data || [];
@@ -175,22 +176,17 @@ export default function PilihDokterScreen() {
     if (loading) {
         return (
             <View className="flex-1 justify-center items-center">
-                <Loading />
+                <ActivityIndicator size="large" color="#1E3A8A" />
+                <Text className="mt-2 text-gray-600">Loading...</Text>
             </View>
         );
     }
 
-    if (loading || dokterData.length === 0) {
-        return (
-            <View className="flex-1 justify-center items-center">
-                <Loading />
-            </View>
-        );
-    }
     if (!loading && dokterData.length === 0) {
         return (
             <SafeAreaView className="flex-1 justify-center items-center bg-white">
-                <Text className="text-gray-500">Tidak ada dokter tersedia</Text>
+                <ActivityIndicator size="large" color="#1E3A8A" />
+                <Text className="mt-2 text-gray-600">Loading...</Text>
             </SafeAreaView>
         );
     }
@@ -264,3 +260,9 @@ export default function PilihDokterScreen() {
         </SafeAreaView>
     );
 }
+
+
+
+
+
+

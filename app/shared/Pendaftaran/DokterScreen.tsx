@@ -23,6 +23,7 @@ export default function DokterScreen() {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
         },
+        timeout: 5000,
       });
       setJadwalList(res.data.data ?? res.data)
     } catch (err: any) {

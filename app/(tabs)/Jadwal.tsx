@@ -1,7 +1,7 @@
 import api from '@/src/api/api';
 import TopBar from '@/src/components/TopBar';
 import TopBarNormal from '@/src/components/TopBarNormal';
-import { getbookingList } from '@/src/services/bookingService';
+import { getAntrianList, getbookingList } from '@/src/services/bookingService';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useState } from 'react';
 import {
@@ -36,27 +36,34 @@ const Header = () => {
 };
 
 function Jadwal() {
-  const [Booking, setBooking] = useState<any[]>([]);
+  const [bookingData, setBookingData] = useState<any[]>([]);
+  const [antrianData, setAntrianData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'booking' | 'antrian'>('booking');
 
-  const getbooking = async () => {
+  const fetchData = async () => {
     try {
-      setLoading(true)
-      const list = await getbookingList();
-      setBooking(list);
+      setLoading(true);
+      const [bookings, antrians] = await Promise.all([getbookingList(), getAntrianList()]);
+      setBookingData(bookings);
+      setAntrianData(antrians);
+      console.log("=======booking======", bookings)
+      console.log("====antrian=========", antrians)
     } catch (err: any) {
       console.log("Error", err.response?.data || err.message);
-      Alert.alert("Error", err.message)
+      Alert.alert("Error", err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    getbooking();
+    fetchData();
   }, []);
 
-  if (loading || Booking.length === 0) {
+  const data = activeTab === 'booking' ? bookingData : antrianData;
+
+  if (loading) {
     return (
       <View className="flex-1 justify-center items-center">
         <ActivityIndicator size="large" color="#1E3A8A" />
@@ -68,26 +75,41 @@ function Jadwal() {
     <SafeAreaView className="flex-1 bg-[#2563eb]">
       <TopBarNormal label="Penjadwalan" />
       <View className="flex-1 bg-gray-100 mt-16 py-14">
+
         <View className='items-center -mt-24 bg-gray-50 py-10 px-10 ml-5 mr-5 rounded-md  justify-center shadow'>
           <View className='flex-row w-full items-center justify-between'>
-            <TouchableOpacity>
-              <Text className='text-lg font-semibold'>Booking</Text>
+            <TouchableOpacity onPress={() => setActiveTab('booking')}>
+              <Text className={`text-lg font-semibold ${activeTab === 'booking' ? 'text-blue-600' : 'text-gray-700'}`}>
+                Booking
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Text className='text-lg font-semibold '>Antrian</Text>
+            <TouchableOpacity onPress={() => setActiveTab('antrian')}>
+              <Text className={`text-lg font-semibold ${activeTab === 'antrian' ? 'text-blue-600' : 'text-gray-700'}`}>
+                Antrian
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
+
         <FlatList
-          data={Booking}
+          data={data}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ padding: 16 }}
           renderItem={({ item }) => (
             <View className="bg-white p-4 mb-3 rounded-xl shadow">
-              <Text className="font-bold text-blue-700">Kode Booking: {item.kode_booking}</Text>
-              <Text>Limit Waktu checkin: {item.limit_waktu}</Text>
-              <Text>Tanggal: {item.tanggal}</Text>
-
+              {activeTab === 'booking' ? (
+                <>
+                  <Text className="font-bold text-blue-700">Kode Booking: {item.kode_booking}</Text>
+                  <Text>Limit Waktu checkin: {item.limit_waktu}</Text>
+                  <Text>Tanggal: {item.tanggal}</Text>
+                </>
+              ) : (
+                <>
+                  <Text className="font-bold text-green-700">Nomor Antrian: {item.id_antrian}</Text>
+                  <Text>Status: {item.status}</Text>
+                  <Text>Tanggal: {item.poli}</Text>
+                </>
+              )}
             </View>
           )}
 
