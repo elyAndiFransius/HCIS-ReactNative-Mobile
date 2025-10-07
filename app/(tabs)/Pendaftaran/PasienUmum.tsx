@@ -134,7 +134,7 @@ function PasienUmum() {
                         }}
                     >
                         <Text className="text-[13px] font-semibold text-gray-800 mb-1">
-                            Nomor Rekam Medis/ NIK<Text className="text-red-500">*</Text>
+                            Nomor Rekam Medis/ NIK  8261<Text className="text-red-500">*</Text>
                         </Text>
                         <InputField
                             icon="id-card-outline"
@@ -144,7 +144,7 @@ function PasienUmum() {
                             containerClassName="w-full mb-5"
                             autoCapitalize='none' />
 
-                        <Text className="text-[13px] font-semibold text-gray-800 mt-5 mb-1">Tanggal Lahir</Text>
+                        <Text className="text-[13px] font-semibold text-gray-800 mt-5 mb-1">Tanggal Lahir 1992-08-06</Text>
                         <TouchableOpacity
                             activeOpacity={0.85}
                             onPress={() => setShowPicker(true)}

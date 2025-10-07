@@ -18,7 +18,6 @@ import {
     View
 } from "react-native";
 
-
 export default function PilihDokterScreen() {
     const [loading, setLoading] = useState(true);
     const [dokterData, setDokterData] = useState<any[]>([]);
@@ -155,7 +154,7 @@ export default function PilihDokterScreen() {
             }
         })
     }
-
+    
     //Fungsi untuk mengirikan seluruh data ke screen lain
     const handleSelectDokter = async (id: string) => {
         try {
@@ -260,7 +259,6 @@ export default function PilihDokterScreen() {
         </SafeAreaView>
     );
 }
-
 
 
 

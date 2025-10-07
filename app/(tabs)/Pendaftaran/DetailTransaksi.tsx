@@ -24,7 +24,7 @@ function DetailTransaksiScreen() {
   const DataPoli = poli ? JSON.parse(poli as string) : null;
   const DataPasien = pasien ? JSON.parse(pasien as string) : null;
 
-  console.log("=======",DataDokter.name)
+
 
   const [open, setOpen] = useState(false);
 
@@ -65,8 +65,6 @@ function DetailTransaksiScreen() {
         id_dokter: DataDokter.id_dokter,
       };
 
-
-
       const res = await api.post("/booking/store", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +78,8 @@ function DetailTransaksiScreen() {
         router.push({
           pathname: "/Pendaftaran/NoAntrian",
           params: {
-            booking: JSON.stringify(DataBooking)
+            booking: JSON.stringify(DataBooking),
+            id: res.data.data.booking.id
           }
         })
 
@@ -92,27 +91,6 @@ function DetailTransaksiScreen() {
       Alert.alert("Error", err.message);
     }
   };
-
-
-  // Komponen baris info rapi
-  function InfoRow({ label, value }: { label: string; value?: string }) {
-    return (
-      <View className="flex-row items-start py-3">
-        <Text
-          className="w-32 text-[13px] font-extrabold text-[#1F5EA8]"
-          style={{ lineHeight: 52 }}
-        >
-          {label}
-        </Text>
-        <Text
-          className="flex-1 text-right font-semibold text-gray-900"
-          style={{ lineHeight: 52 }}
-        >
-          {value || "-"}
-        </Text>
-      </View>
-    );
-  }
 
 
   return (

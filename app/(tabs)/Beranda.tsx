@@ -25,8 +25,6 @@ const berita = [
 
 const Header = () => {
     // Variabel Logout dari Provider 
-    const { user, logout } = useContext(AuthContext)!;
-
     return (
         <View className='flex-row justify-between items-center px-5 py-3 mt-10 bg-gray-50 shadow'>
             <View className='flex-row items-center'>
@@ -106,7 +104,6 @@ function Beranda() {
                 {/* Section untuk melihat antrian */}
                 <View className="px-4 mt-2 mb-2">
                     <Text className="font-bold mb-2  text-sm text-blue-700">Pendaftaran Aktif</Text>
-
                     <View className="flex-row bg-white items-center rounded-lg shadow p-4">
                         {/* Foto Dokter */}
                         <Image

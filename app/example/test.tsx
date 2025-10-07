@@ -6,12 +6,12 @@ import React, { useMemo, useState } from "react";
 import {
   Alert,
   ImageBackground,
-  Modal,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import Modal from "react-native-modal";
 import QRCode from "react-native-qrcode-svg";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -225,13 +225,13 @@ export default function NomorAntrianScreen() {
             </TouchableOpacity>
           </View>
           <Modal
-            // isVisible={showModal}
-            // onBackdropPress={() => setShowModal(false)}
-            // useNativeDriver
-            // useNativeDriverForBackdrop
-            // animationIn="zoomIn"
-            // animationOut="zoomOut"
-            // backdropTransitionOutTiming={0}
+            isVisible={showModal}
+            onBackdropPress={() => setShowModal(false)}
+            useNativeDriver
+            useNativeDriverForBackdrop
+            animationIn="zoomIn"
+            animationOut="zoomOut"
+            backdropTransitionOutTiming={0}
           >
             <View
               className="bg-white rounded-2xl px-5 pt-6 pb-5"

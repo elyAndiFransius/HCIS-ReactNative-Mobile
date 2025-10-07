@@ -1,8 +1,11 @@
 import api from '@/src/api/api';
 import TopBar from '@/src/components/TopBar';
 import TopBarNormal from '@/src/components/TopBarNormal';
-import { getAntrianList, getbookingList } from '@/src/services/bookingService';
+import { getAntrianList } from '@/src/services/antrianService';
+import { getbookingList } from '@/src/services/bookingService';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { push } from 'expo-router/build/global-state/routing';
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -90,27 +93,34 @@ function Jadwal() {
             </TouchableOpacity>
           </View>
         </View>
-
+        
         <FlatList
           data={data}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item, index) =>
+            (item.id ?? item.id_antrian ?? index).toString()}
           contentContainerStyle={{ padding: 16 }}
           renderItem={({ item }) => (
-            <View className="bg-white p-4 mb-3 rounded-xl shadow">
-              {activeTab === 'booking' ? (
-                <>
-                  <Text className="font-bold text-blue-700">Kode Booking: {item.kode_booking}</Text>
-                  <Text>Limit Waktu checkin: {item.limit_waktu}</Text>
-                  <Text>Tanggal: {item.tanggal}</Text>
-                </>
-              ) : (
-                <>
-                  <Text className="font-bold text-green-700">Nomor Antrian: {item.id_antrian}</Text>
-                  <Text>Status: {item.status}</Text>
-                  <Text>Tanggal: {item.poli}</Text>
-                </>
-              )}
-            </View>
+            <TouchableOpacity onPress={() => router.push({
+              pathname: '/Pendaftaran/NoAntrian',
+              params: { id: item.id }
+            })
+            }>
+              <View className="bg-white p-4 mb-3 rounded-xl ">
+                {activeTab === 'booking' ? (
+                  <>
+                    <Text className="font-bold text-blue-700">Kode Booking: {item.id}</Text>
+                    <Text>Limit Waktu checkin: {item.limit_waktu}</Text>
+                    <Text>Tanggal: {item.tanggal}</Text>
+                  </>
+                ) : (
+                  <>
+                    <Text className="font-bold text-green-700">Nomor Antrian: {item.id_antrian}</Text>
+                    <Text>Status: {item.status}</Text>
+                    <Text>Tanggal: {item.poli}</Text>
+                  </>
+                )}
+              </View>
+            </TouchableOpacity>
           )}
 
           ListEmptyComponent={() => (
