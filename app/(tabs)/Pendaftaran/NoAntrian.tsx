@@ -30,7 +30,6 @@ function Row({ left, right }: { left: string; right: string }) {
     );
 }
 
-
 export default function NomorAntrianScreen() {
     const tabBarHeight = useBottomTabBarHeight();
     const insets = useSafeAreaInsets();

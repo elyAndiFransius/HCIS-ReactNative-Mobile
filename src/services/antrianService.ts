@@ -27,3 +27,15 @@ export const checkIn = async (id: string) => {
     });
     return res.data.data ?? res.data;
 }
+
+export const filterByDataRange = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const res = await api.get(`/antrian/filter-by-range`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: `Application/json`
+        },
+    });
+    return res;
+
+}

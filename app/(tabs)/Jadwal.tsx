@@ -79,7 +79,7 @@ function Jadwal() {
       <TopBarNormal label="Penjadwalan" />
       <View className="flex-1 bg-gray-100 mt-16 py-14">
 
-        <View className='items-center -mt-24 bg-gray-50 py-10 px-10 ml-5 mr-5 rounded-md  justify-center shadow'>
+        <View className='items-center -mt-24 bg-gray-50 py-5 px-10 ml-5 mr-5 rounded-md  justify-center shadow'>
           <View className='flex-row w-full items-center justify-between'>
             <TouchableOpacity onPress={() => setActiveTab('booking')}>
               <Text className={`text-lg font-semibold ${activeTab === 'booking' ? 'text-blue-600' : 'text-gray-700'}`}>
