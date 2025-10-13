@@ -7,15 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { push } from 'expo-router/build/global-state/routing';
 import React, { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  Image,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { ActivityIndicator, Alert, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,8 +20,7 @@ const Header = () => {
         paddingTop: insets.top + 12,
         paddingBottom: 12,
         paddingHorizontal: 16,
-      }}
-    >
+      }}>
       <Text className="text-gray-700 text-lg font-bold">
         Jadwal
       </Text>
@@ -93,7 +84,7 @@ function Jadwal() {
             </TouchableOpacity>
           </View>
         </View>
-        
+
         <FlatList
           data={data}
           keyExtractor={(item, index) =>

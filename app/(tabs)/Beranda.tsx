@@ -77,6 +77,7 @@ function Beranda() {
     }, []);
 
 
+
     const screenWidth = Dimensions.get("window").width;
     const itemWidth = screenWidth / 4 - 30;
     return (
@@ -150,70 +151,72 @@ function Beranda() {
                                 </Text>
                             </View>
                         ) : (
-                            <View>
-                                {/* Baris Atas: Foto Dokter, Info Dokter, dan Nomor Antrean */}
-                                <View className='flex-row justify-between items-start'>
-                                    {/* Foto Dokter */}
-                                    <Image
-                                        source={require('../../assets/icons/akun.png')}
-                                        className="w-14 h-14 rounded-full mr-3" // Sesuaikan margin
-                                        resizeMode="cover"
-                                    />
+                            <TouchableOpacity onPress={() => router.push('/(tabs)/Jadwal')}>
+                                <View>
+                                    {/* Baris Atas: Foto Dokter, Info Dokter, dan Nomor Antrean */}
+                                    <View className='flex-row justify-between items-start'>
+                                        {/* Foto Dokter */}
+                                        <Image
+                                            source={require('../../assets/icons/akun.png')}
+                                            className="w-14 h-14 rounded-full mr-3" // Sesuaikan margin
+                                            resizeMode="cover"
+                                        />
 
-                                    {/* Deskripsi Dokter (di Tengah) */}
-                                    <View className="flex-1 mr-4">
-                                        <Text className="font-semibold text-sm md:text-base">
-                                            Dr. {antrian[0]?.booking?.dokter?.nama ?? "-"}
-                                        </Text>
-                                        <Text className="text-gray-600 text-xs md:text-sm uppercase">
-                                            POLI {antrian[0]?.booking?.list_poli?.nama ?? "-"}
-                                        </Text>
+                                        {/* Deskripsi Dokter (di Tengah) */}
+                                        <View className="flex-1 mr-4">
+                                            <Text className="font-semibold text-sm md:text-base">
+                                                Dr. {antrian[0]?.booking?.dokter?.nama ?? "-"}
+                                            </Text>
+                                            <Text className="text-gray-600 text-xs md:text-sm uppercase">
+                                                POLI {antrian[0]?.booking?.list_poli?.nama ?? "-"}
+                                            </Text>
 
-                                        <Text className="text-gray-600 text-xs md:text-sm">
-                                            {getDays(antrian[0]?.tanggal)}
-                                        </Text>
+                                            <Text className="text-gray-600 text-xs md:text-sm">
+                                                {getDays(antrian[0]?.tanggal)}
+                                            </Text>
+                                        </View>
+
+                                        {/* Antrean (di Kanan) */}
+                                        <View className="items-center mr-5">
+                                            <Text className="font-semibold text-sm md:text-base text-gray-700">Antreanx</Text>
+                                            <Text className="font-bold text-4xl text-green-600">
+                                                {antrian[0]?.no_antrian ?? "-"}
+                                            </Text>
+                                        </View>
                                     </View>
 
-                                    {/* Antrean (di Kanan) */}
-                                    <View className="items-center mr-5">
-                                        <Text className="font-semibold text-sm md:text-base text-gray-700">Antrean</Text>
-                                        <Text className="font-bold text-4xl text-green-600">
-                                            {antrian[0]?.no_antrian ?? "-"}
-                                        </Text>
+                                    <View className='flex-row items-center justify-between mt-1'>
+                                        <View className='flex-row bg-[#4692C6] items-center rounded-xl px-2 py-1.5'>
+                                            <Ionicons name="calendar" color={"#FFFFFF"} size={16} />
+                                            <Text className="text-white text-xs ml-1">
+                                                {antrian[0]?.tanggal
+                                                    ? new Date(antrian[0].tanggal).toLocaleDateString('id-ID', {
+                                                        weekday: 'short',
+                                                        day: 'numeric',
+                                                        month: 'short',
+                                                        year: 'numeric'
+                                                    }) : "-"}
+                                            </Text>
+                                        </View>
+
+                                        {/* Tombol Jam */}
+                                        <View className='flex-row bg-gray-400 items-center rounded-xl px-2 py-1.5 ml-2'>
+                                            <Ionicons name="time-outline" color={"#000000"} size={16} />
+                                            <Text className="text-[#000000] text-xs ml-1">
+                                                {antrian[0]?.jam ?? "00:00 - 00:00"}
+                                            </Text>
+                                        </View>
+
+                                        <View className='flex-row items-center ml-auto mr-5'>
+                                            <Ionicons name="people" color={"#0D4D8B"} size={25} />
+                                            <Text className="text-gray-700 font-semibold text-base ml-1 mr-3">0</Text>
+
+                                            <Ionicons name="happy" color={"#0D4D8B"} size={25} />
+                                            <Text className="text-gray-700 font-semibold text-base ml-1">0</Text>
+                                        </View>
                                     </View>
                                 </View>
-
-                                <View className='flex-row items-center justify-between mt-1'>
-                                    <View className='flex-row bg-[#4692C6] items-center rounded-xl px-2 py-1.5'>
-                                        <Ionicons name="calendar" color={"#FFFFFF"} size={16} />
-                                        <Text className="text-white text-xs ml-1">
-                                            {antrian[0]?.tanggal
-                                                ? new Date(antrian[0].tanggal).toLocaleDateString('id-ID', {
-                                                    weekday: 'short',
-                                                    day: 'numeric',
-                                                    month: 'short',
-                                                    year: 'numeric'
-                                                }) : "-"}
-                                        </Text>
-                                    </View>
-
-                                    {/* Tombol Jam */}
-                                    <View className='flex-row bg-gray-400 items-center rounded-xl px-2 py-1.5 ml-2'>
-                                        <Ionicons name="time-outline" color={"#000000"} size={16} />
-                                        <Text className="text-[#000000] text-xs ml-1">
-                                            {antrian[0]?.jam ?? "00:00 - 00:00"}
-                                        </Text>
-                                    </View>
-
-                                    <View className='flex-row items-center ml-auto mr-5'>
-                                        <Ionicons name="people" color={"#0D4D8B"} size={25} />
-                                        <Text className="text-gray-700 font-semibold text-base ml-1 mr-3">0</Text>
-
-                                        <Ionicons name="happy" color={"#0D4D8B"} size={25} />
-                                        <Text className="text-gray-700 font-semibold text-base ml-1">0</Text>
-                                    </View>
-                                </View>
-                            </View>
+                            </TouchableOpacity>
                         )}
                     </View>
                 </View>

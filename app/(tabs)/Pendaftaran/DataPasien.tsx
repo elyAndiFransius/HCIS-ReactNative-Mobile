@@ -1,12 +1,15 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
     View,
     Text,
     ScrollView,
     ImageBackground,
     TouchableOpacity,
+    Modal,
+    Platform,
 } from "react-native";
 import { router, useLocalSearchParams, usePathname } from "expo-router";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -48,7 +51,52 @@ function DataPasien() {
     const { pasien } = useLocalSearchParams();
     const data = pasien ? JSON.parse(pasien as string) : null;
 
+    //  Modal untuk menampilkan kalender
+    const [isCalendarModalOpen, setCalendarModalOpen] = useState(false);
+    const [showRNPicker, setShowRNPicker] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const handleToday = () => setDate(new Date());
+    const onAndroidChange = (e: DateTimePickerEvent, d?: Date) => {
+        if (e.type === "set" && d) setDate(d);
+        setShowRNPicker(false);
+    };
+    const handleSelectPoli = (item: any) => {
+        setSelectedPoli(item);
+        setCalendarModalOpen(true);
+    };
+
+    const handlePick = () => {
+        if (!selectedPoli) return;
+
+        setCalendarModalOpen(false);
+        setShowRNPicker(false);
+
+        console.log('Ini data tanggal yang kamu klik => ', date.toISOString())
+
+        router.push({
+            pathname: "/Pendaftaran/PoliKlinik",
+            params: {
+                tgl: date.toISOString(),
+            },
+        });
+    };
+
+
+    const [selectedPoli, setSelectedPoli] = useState<string | null>(null);
+    // Fungsi untuk membatalkan inptan tanggal
+    const handleCancel = () => {
+        setCalendarModalOpen(false);
+        setSelectedPoli(null);
+        setShowRNPicker(false);
+    };
+
     const umur = getAgeFromYYYYMMDD(data?.tgl_lahir);
+
+    // Fungsi untuk melakukan format tanggal dari anggka -> Nama bukan
+    const fmt = (d: Date) => {
+        const bulan = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+        return `${d.getDate()} ${bulan[d.getMonth()]} ${d.getFullYear()}`;
+    };
 
     const dobLong = useMemo(() => {
         if (!data?.tgl_lahir) return "-";
@@ -129,11 +177,12 @@ function DataPasien() {
                     <View className="w-full max-w-md">
                         <TouchableOpacity
                             className="bg-[#1F5EA8] rounded-xl items-center py-3 mb-3"
-                            onPress={() =>
-                                router.push({
-                                    pathname: "/Pendaftaran/PoliKlinik",
-                                    params: { pasien },
-                                })}
+                            // onPress={() =>
+                            //     router.push({
+                            //         pathname: "/Pendaftaran/PoliKlinik",
+                            //         params: { pasien },
+                            //     })}
+                            onPress={() => handleSelectPoli(1)}
                         >
                             <Text className="text-white font-extrabold text-base">
                                 Pilih Poli Tujuan
@@ -151,6 +200,91 @@ function DataPasien() {
                     </View>
                 </ScrollView>
             </ImageBackground>
+            {/* Modal Kalender */}
+            <Modal
+                visible={isCalendarModalOpen}
+                transparent
+                animationType="fade"
+                onRequestClose={handleCancel}
+            >
+                <View className="flex-1 bg-black/30 items-center justify-center px-5">
+                    <View
+                        className="w-full rounded-2xl bg-white p-4"
+                        style={{
+                            shadowColor: "#000",
+                            shadowOpacity: 0.15,
+                            shadowRadius: 12,
+                            shadowOffset: { width: 0, height: 6 },
+                            elevation: 8,
+                        }}
+                    >
+                        {/* Judul */}
+                        <View className="flex-row items-center justify-between mb-3">
+                            <Text className="text-base font-extrabold text-[#0D4D8F]">
+                                Atur Jadwal Kunjungan Anda
+                            </Text>
+                        </View>
+
+                        {/* Tanggal + Hari ini */}
+                        <View className="flex-row items-center justify-between mb-3">
+                            <Text className="text-lg font-semibold text-gray-900">
+                                {fmt(date)}
+                            </Text>
+                            <TouchableOpacity
+                                onPress={handleToday}
+                                className="px-3 py-1 rounded-md bg-gray-100"
+                            >
+                                <Text className="text-[12px] font-semibold text-gray-700">
+                                    Hari ini
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Area kalender */}
+                        <View className="rounded-xl border border-gray-200 p-4 items-center">
+                            {Platform.OS === "ios" ? (
+                                <DateTimePicker
+                                    value={date}
+                                    mode="date"
+                                    display="inline"
+                                    onChange={(_, d) => d && setDate(d)}
+                                />
+                            ) : (
+                                <>
+                                    <TouchableOpacity
+                                        activeOpacity={0.9}
+                                        onPress={() => setShowRNPicker(true)}
+                                        className="w-full bg-gray-100 rounded-lg px-4 py-3"
+                                    >
+                                        <Text className="text-gray-800">{fmt(date)}</Text>
+                                    </TouchableOpacity>
+
+                                    {showRNPicker && (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="date"
+                                            display="calendar"
+                                            onChange={onAndroidChange}
+                                            minimumDate={new Date()}
+                                        />
+                                    )}
+                                </>
+                            )}
+                        </View>
+
+                        {/* Actions */}
+                        <View className="flex-row justify-between mt-4">
+                            <TouchableOpacity onPress={handleCancel} className="flex-1 mr-2 bg-gray-100 rounded-xl py-3 items-center">
+                                <Text className="font-semibold text-gray-700">Batal</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={handlePick} className="flex-1 ml-2 bg-[#1F5EA8] rounded-xl py-3 items-center">
+                                <Text className="font-extrabold text-white">Pilih</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </SafeAreaView >
     );
 }
