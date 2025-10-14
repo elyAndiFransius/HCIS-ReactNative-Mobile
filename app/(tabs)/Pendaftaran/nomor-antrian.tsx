@@ -2,19 +2,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useMemo,useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-  Alert,
   ImageBackground,
   SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import Modal from "react-native-modal";
 import QRCode from "react-native-qrcode-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Modal from "react-native-modal";
 
 // Komponen kecil: baris label-nilai
 function Row({ left, right }: { left: string; right: string }) {
