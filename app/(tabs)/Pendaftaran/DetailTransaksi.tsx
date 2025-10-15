@@ -15,16 +15,11 @@ import SuccessModal from '@/src/components/SuccessModal';
 
 
 function DetailTransaksiScreen() {
-  // Ambil data yang sudah di kirimkan dari local mobile
-  const { dokter } = useLocalSearchParams();
-  const { poli, tanggal, pasien } = useLocalSearchParams();
 
-  // Convent ke dalam bentuk JSON
-  const DataDokter = dokter ? JSON.parse(dokter as string) : null;
-  const DataPoli = poli ? JSON.parse(poli as string) : null;
+  const { dataTransaksi, pasien,  tanggal } = useLocalSearchParams();
+
   const DataPasien = pasien ? JSON.parse(pasien as string) : null;
-
-
+  const Data = dataTransaksi ? JSON.parse(dataTransaksi as string) : null;
 
   const [open, setOpen] = useState(false);
 
@@ -61,8 +56,8 @@ function DetailTransaksiScreen() {
         status: "belum",
         tanggal: tanggal,
         kode: DataPasien.kode,
-        id_list_poli: DataPoli.id_list_poli,
-        id_dokter: DataDokter.id_dokter,
+        id_list_poli: Data.id_list_poli,
+        id_dokter: Data?.dokter_list?.[0]?.id_dokter,
       };
 
       const res = await api.post("/booking/store", payload, {
@@ -118,7 +113,7 @@ function DetailTransaksiScreen() {
             <View className='ml-5 '>
               <TouchableOpacity onPress={() => router.push('/Auth/User')} >
                 <Text className='font-normal text-sm mr-1 text-gray-900'>Dokter </Text>
-                <Text className='font-semibold text-base text-gray-900 mr-1'>{DataDokter.nama}</Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>{Data?.dokter_list?.[0]?.nama}</Text>
                 <View className='flex-row'>
                   <Text className='text-base text-[#2563eb]'>Lihat informasi dokter</Text>
                   <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
@@ -138,7 +133,7 @@ function DetailTransaksiScreen() {
             <View className='ml-5 '>
               <TouchableOpacity onPress={() => router.push('/Auth/User')} >
                 <Text className='font-normal text-sm mr-1 text-gray-900'>Jenis Poli </Text>
-                <Text className='font-semibold text-base text-gray-900 mr-1'>{DataPoli.name}</Text>
+                <Text className='font-semibold text-base text-gray-900 mr-1'>{Data.nama_poli}</Text>
                 <View className='flex-row'>
                   <Text className='text-base text-blue-500'>Lihat informasi dokter</Text>
                   <Ionicons name='chevron-forward-outline' size={15} color="#2563eb" style={{ paddingTop: 2.5 }} />
@@ -165,8 +160,6 @@ function DetailTransaksiScreen() {
             </View>
           </View>
         </View>
-
-
 
         <View className='ml-5 mr-5'>
           <Button label="Buat Janji Temu"

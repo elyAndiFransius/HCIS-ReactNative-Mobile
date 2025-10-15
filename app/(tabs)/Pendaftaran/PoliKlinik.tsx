@@ -1,10 +1,7 @@
 import api from '@/src/api/api';
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  ActivityIndicator, Alert, FlatList, Text, TouchableOpacity, Platform,
-  View, Modal, ImageBackground
-} from 'react-native';
+import { ActivityIndicator, FlatList, Text, TouchableOpacity, Platform, View, Modal } from 'react-native';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Ionicons } from '@expo/vector-icons';

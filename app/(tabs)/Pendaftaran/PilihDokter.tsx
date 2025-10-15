@@ -38,7 +38,6 @@ export default function PilihDokterScreen() {
     const DataPasien = pasien ? JSON.parse(pasien as string) : null; // Mengambil data pasien
     const DataPoli = poli ? JSON.parse(poli as string) : null;
 
-    console.log("Ini data pasien", DataPasien.no_ktp)
     console.log("Ini data Poli", DataPoli)
     console.log("Ini data Tanggal", formatData)
 

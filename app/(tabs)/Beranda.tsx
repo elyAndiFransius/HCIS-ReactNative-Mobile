@@ -2,7 +2,7 @@ import { AuthContext } from '@/src/api/AuthProvider'
 import CardEvent from '@/src/components/CardEvent'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback,  useEffect, useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, Alert, RefreshControl } from 'react-native'
 import { filterByDataRange } from '@/src/services/antrianService'
@@ -118,7 +118,7 @@ function Beranda() {
                                 if (item.title === "Pendaftaran") {
                                     router.push('/Pendaftaran')
                                 } if (item.title === "Rawat Inap") {
-                                    router.push('/shared/Pendaftaran/DokterScreen')
+                                    router.push('/(tabs)/Pendaftaran/DokterPoli')
                                 } else {
                                 } if (item.title === "IGD") {
                                     router.push('/shared/Pendaftaran/DokterScreen')

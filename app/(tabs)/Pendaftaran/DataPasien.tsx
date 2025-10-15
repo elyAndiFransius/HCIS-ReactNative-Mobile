@@ -51,6 +51,7 @@ function DataPasien() {
     const { pasien } = useLocalSearchParams();
     const data = pasien ? JSON.parse(pasien as string) : null;
 
+
     //  Modal untuk menampilkan kalender
     const [isCalendarModalOpen, setCalendarModalOpen] = useState(false);
     const [showRNPicker, setShowRNPicker] = useState(false);
@@ -71,16 +72,16 @@ function DataPasien() {
         setCalendarModalOpen(false);
         setShowRNPicker(false);
 
-        console.log('Ini data tanggal yang kamu klik => ', date.toISOString())
 
         router.push({
-            pathname: "/Pendaftaran/PoliKlinik",
+            pathname: "/(tabs)/Pendaftaran/DokterPoli",
             params: {
-                tgl: date.toISOString(),
+                tgl: date.toISOString().split("T")[0],
+                pasien: JSON.stringify(data)
             },
         });
     };
-
+    
 
     const [selectedPoli, setSelectedPoli] = useState<string | null>(null);
     // Fungsi untuk membatalkan inptan tanggal
