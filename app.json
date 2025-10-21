@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "",
+    "name": "Ayo Sehat",
     "slug": "",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,7 +15,8 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.fransius"
     },
     "web": {
       "bundler": "metro",
@@ -30,7 +31,8 @@
     },
     "splash": {
       "backgroundColor": "#ffffff",
-      "resizeMode": "contain"
+      "resizeMode": "contain",
+      "image": "./assets/images/splash-icon.png"
     }
   }
 }

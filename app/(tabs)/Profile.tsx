@@ -43,7 +43,7 @@ export default function Profile() {
       <Header />
       <ScrollView className='flex-1 bg-gray-100 rounded-2xl' contentContainerStyle={{ paddingBottom: 80 }}>
         <View className='ml-5 mr-5 mt-5'>
-          <Text className='font-bold text-sm text-blue-700 mb-2'>Rewards</Text>
+          <Text className='font-bold text-sm text-blue-700 mb-2'></Text>
           <View className='flex-row justify-between bg-slate-200 mt-3 px-9 py-10 rounded-lg'>
             <View className='flex-row'>
               <Ionicons name='ticket-outline' size={20} />

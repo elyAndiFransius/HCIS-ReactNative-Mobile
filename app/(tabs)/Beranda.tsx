@@ -2,7 +2,7 @@ import { AuthContext } from '@/src/api/AuthProvider'
 import CardEvent from '@/src/components/CardEvent'
 import { Ionicons } from '@expo/vector-icons'
 import { router } from 'expo-router'
-import React, { useCallback,  useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, Alert, RefreshControl } from 'react-native'
 import { filterByDataRange } from '@/src/services/antrianService'
@@ -87,8 +87,7 @@ function Beranda() {
                 contentContainerStyle={{ paddingBottom: 80 }}
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
-            >
+                }>
                 <View className='flex-row justify-center mt-1 ml-5 mr-5'>
                     <CardEvent
                         images={[
@@ -135,7 +134,6 @@ function Beranda() {
                     scrollEnabled={false}
                 />
 
-                {/* Section untuk melihat antrian */}
                 {/* Section untuk melihat antrian */}
                 <View className="px-4 mt-2 mb-2">
                     <Text className="font-bold mb-2 text-sm text-blue-700">Pendaftaran Aktif</Text>

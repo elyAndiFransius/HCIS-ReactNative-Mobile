@@ -5,10 +5,10 @@ import { AuthProvider } from "@/src/api/AuthProvider";
 export default function RootLayout() {
   return (
     <AuthProvider>
-      <Stack initialRouteName="wellcome/SplashScreen" screenOptions={{ headerShown: false }}>
+      <Stack initialRouteName="welcome/splash-screen" screenOptions={{ headerShown: false }}>
         {/* Halaman Pertama seperti SplashScreen */}
-        <Stack.Screen name="wellcome/SplashScreen" />
-        <Stack.Screen name="wellcome/OnBoardingScreen" />
+        <Stack.Screen name="welcome/splash-screen" />
+        <Stack.Screen name="welcome/onboarding-screen" />
         <Stack.Screen name="Auth/Reset/InputEmail" />
 
         {/* Halaman utama */}

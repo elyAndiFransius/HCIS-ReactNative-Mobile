@@ -10,27 +10,37 @@ function LoginScreen() {
   const [password, setPassword] = useState('')
   const auth = useContext(AuthContext)
 
+  // handler untuk inputan kosong
   if (!auth) return null
   const { login } = auth
 
   const handleLogin = async () => {
-    try {
-      const res = await api.post('/login', { email, password })
-
-      const token = res.data?.token
-      const user = res.data?.user
-
-      if (token && user) {
-        // simpan lewat context
-        await login({ user, token: token })
-      }
-
-      router.replace('/(tabs)/Beranda')
-    } catch (err: any) {
-      console.log(err.response?.data)
-      Alert.alert("Error", "Gagal Login, cek Email dan Password")
+    if (!email.trim() || !password) {
+      Alert.alert('Harap isi email dan password');
+      return;
     }
-  }
+
+    try {
+      const res = await api.post('/login', { email, password });
+      console.log('Response:', res.data);
+
+      // cek apakah login berhasil
+      if (res.data.success) {
+        const token = res.data.token;
+        const user = res.data.user;
+
+        await login({ user, token });
+        router.replace('/(tabs)/Beranda');
+      } else {
+        // kalau success == false
+        Alert.alert(res.data.message || 'Email atau password salah');
+      }
+    } catch (err: any) {
+      console.log('Login error:', err.response?.data || err.message);
+      Alert.alert('Terjadi kesalahan jaringan atau server.');
+    }
+  };
+
 
   return (
     <View className="flex-1 bg-white">
